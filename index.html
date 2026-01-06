@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Resumen Ejecutivo - PAM 2025</title>
+    <title>Dashboard Unificado - MINTRAB 2025</title>
     <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
@@ -18,6 +18,7 @@
             --text: #334155;    
             --bg-gray: #f8fafc;
             --hover-row: #e0f2fe;
+            --train-color: #0891b2; /* Color Teal para Capacitación */
         }
 
         body {
@@ -39,9 +40,45 @@
             box-shadow: 0 10px 25px rgba(0,0,0,0.2);
             display: grid;
             grid-template-columns: 300px 1fr;
-            grid-template-rows: auto 1fr auto;
+            grid-template-rows: auto auto 1fr auto; /* Ajustado para el selector */
             gap: 30px; 
             border-top: 15px solid var(--primary);
+            position: relative;
+        }
+
+        /* SELECTOR DE PROYECTO */
+        .project-selector-container {
+            grid-column: 1 / -1;
+            background: #f1f5f9;
+            padding: 15px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 15px;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .project-selector-container label {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 14px;
+        }
+
+        .project-select {
+            padding: 10px 15px;
+            font-family: 'Urbanist', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--primary);
+            border: 2px solid var(--accent);
+            border-radius: 6px;
+            background-color: white;
+            cursor: pointer;
+            outline: none;
+        }
+        .project-select:hover {
+            background-color: #f8fafc;
         }
 
         /* HEADER */
@@ -83,10 +120,19 @@
             padding: 20px;
             border-radius: 12px;
             text-align: center;
+            transition: all 0.3s ease;
         }
         .status-card h3 { color: #166534; margin: 0 0 10px 0; font-size: 18px; }
         .status-card .big-icon { font-size: 60px; color: var(--success); margin: 10px 0; }
         .status-card p { font-size: 14px; font-weight: bold; color: #14532d; margin: 0; line-height: 1.4; }
+        
+        .global-pct {
+            font-size: 42px;
+            font-weight: 800;
+            color: var(--primary);
+            margin: 10px 0;
+            display: block;
+        }
 
         .req-card {
             background: #fffbeb;
@@ -148,7 +194,8 @@
         }
         .cycle-step.dev { border-top: 4px solid var(--accent); }
         .cycle-step.qa { border-top: 4px solid var(--warning); }
-        .cycle-step.train { border-top: 4px solid #8b5cf6; }
+        .cycle-step.train { border-top: 4px solid var(--train-color); }
+        .cycle-step.train .step-num { background: var(--train-color); }
         .cycle-step.prod { border-top: 4px solid var(--success); }
         
         .step-num { 
@@ -158,7 +205,6 @@
         }
         .cycle-step.dev .step-num { background: var(--accent); }
         .cycle-step.qa .step-num { background: var(--warning); }
-        .cycle-step.train .step-num { background: #8b5cf6; }
         .cycle-step.prod .step-num { background: var(--success); }
 
         .cycle-step h4 { margin: 10px 0 5px 0; font-size: 15px; color: var(--text); text-align: center; font-weight: 700; text-transform: uppercase;}
@@ -169,22 +215,7 @@
         }
         .doc-tag i { color: var(--primary); }
 
-        /* Actividades Paralelas */
-        .parallel-grid {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 15px;
-            margin-bottom: 30px;
-        }
-        .parallel-card {
-            background: white; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0; border-left: 4px solid var(--primary);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.02); display: flex; flex-direction: column; justify-content: center;
-        }
-        .parallel-card h5 { margin: 0 0 5px 0; color: var(--primary); font-size: 13px; font-weight: 700; }
-        .parallel-card p { margin: 0; font-size: 11px; color: #64748b; line-height: 1.3; }
-        .parallel-card i { font-size: 20px; color: var(--accent); margin-bottom: 8px; }
-
-        /* Cronograma Table (AHORA INTERACTIVO) */
+        /* Cronograma Table */
         .dates-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 10px; cursor: pointer; }
         .dates-table th { text-align: left; padding: 10px; background-color: var(--primary); color: white; font-weight: 600; text-transform: uppercase; font-size: 11px; border: 1px solid var(--primary); }
         .dates-table td { padding: 10px; border: 1px solid #e2e8f0; color: var(--text); vertical-align: middle; }
@@ -192,7 +223,6 @@
         .date-cell { font-family: monospace; font-weight: 600; color: var(--primary); }
         .date-done { color: #94a3b8; text-decoration: line-through; }
         .mod-name { font-weight: 700; width: 30%; } 
-        .prod-cell-merged { background-color: #f0fdf4; color: #166534; font-weight: 800; text-align: center; border: 2px solid var(--success) !important; font-size: 14px; text-transform: uppercase; }
         .perc-cell { font-weight: 800; text-align: center; color: var(--accent); background-color: #f0f9ff; width: 80px; }
 
         /* Efecto Hover para Cronograma */
@@ -238,13 +268,8 @@
 
         /* Footer */
         .footer-section { grid-column: 1 / -1; display: flex; flex-direction: column; gap: 20px; }
-        .legal-box { background: #eff6ff; border-left: 5px solid var(--primary); padding: 15px 20px; display: flex; align-items: center; gap: 15px; }
-        .legal-box i { font-size: 30px; color: var(--primary); }
-        .legal-text h4 { margin: 0; color: var(--primary); font-weight: 700;}
-        .legal-text p { margin: 5px 0 0 0; font-size: 13px; color: #475569; }
-        .modules-title { font-size: 22px; color: var(--primary); font-weight: 800; text-transform: uppercase; letter-spacing: -0.5px; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; margin-top: 10px; }
         .timeline-mini { display: flex; align-items: flex-start; justify-content: space-between; background: white; padding: 25px 15px; border-radius: 8px; border: 1px solid #e2e8f0; }
-        .t-step { text-align: center; font-size: 12px; color: #94a3b8; font-weight: 600; width: 140px; position: relative; flex-shrink: 0; }
+        .t-step { text-align: center; font-size: 12px; color: #94a3b8; font-weight: 600; width: 130px; position: relative; flex-shrink: 0; }
         .t-step i { font-size: 16px; margin-bottom: 5px; }
         .t-step.active { color: var(--success); }
         .t-step.in-progress { color: var(--accent); }
@@ -256,7 +281,6 @@
         @media (max-width: 1024px) {
             .one-pager { grid-template-columns: 1fr; width: 100%; padding: 20px; }
             .cycle-wrapper { flex-wrap: wrap; }
-            .parallel-grid { grid-template-columns: repeat(2, 1fr); }
             .timeline-mini { overflow-x: auto; }
         }
     </style>
@@ -264,163 +288,379 @@
 <body>
 
     <div class="one-pager">
+        <div class="project-selector-container">
+            <label for="projectSelect"><i class="fa-solid fa-layer-group"></i> Seleccionar Proyecto:</label>
+            <select id="projectSelect" class="project-select" onchange="changeProject(this.value)">
+                <option value="IGT">IGT - Inspección General</option>
+                <option value="PAM">PAM - Adulto Mayor</option>
+            </select>
+        </div>
+
         <header class="header">
-            <div><h1>Plan de Implementación del sistema de programa de aporte economico del adulto mayor-PAM-</h1></div>
-            <div class="meta"><strong>MINTRAB 2025</strong><br>Dirección de Sistemas de Información DISI</div>
+            <div><h1 id="project-title">Sistema Integrado de Inspección General de Trabajo - IGT</h1></div>
+            <div class="meta" id="project-meta"><strong>MINTRAB 2025</strong><br>Dirección de Sistemas de Información DISI</div>
         </header>
 
         <aside class="sidebar">
-            <div class="status-card">
-                <h3>ESTADO ACTUAL</h3>
-                <div class="big-icon"><i class="fa-solid fa-clipboard-check"></i></div>
-                <p>MÓDULO 1:<br>INSCRIPCIÓN DEL ADULTO MAYOR</p>
-                <div style="font-size: 12px; margin-top: 5px; color: #166534; font-weight: bold;">(FINALIZADO)</div>
-                <div style="font-size: 12px; margin-top: 10px; border-top: 1px solid #bbf7d0; padding-top: 5px; color: #15803d;">Pendiente: Aval QA</div>
+            <div class="status-card" id="status-card-bg">
+                <h3>ESTADO GLOBAL</h3>
+                <div class="big-icon"><i class="fa-solid fa-chart-pie"></i></div>
+                <p>AVANCE GENERAL DEL PROYECTO</p>
+                <span id="global-pct-display" class="global-pct">--%</span>
+                <div id="status-note" style="font-size: 12px; margin-top: 10px; border-top: 1px solid #bbf7d0; padding-top: 5px; color: #15803d;">Siguiente Hito: Pruebas QA IGT</div>
             </div>
             <div class="req-card">
-                <h3>RECURSOS HUMANOS REQUERIDOS (PAM)</h3>
-                <ul class="req-list">
-                    <li><i class="fa-solid fa-users-viewfinder"></i><div><strong>Pruebas QA (1)</strong><br>Validación funcional.</div></li>
-                    <li><i class="fa-solid fa-book-open"></i><div><strong>Manuales (1)</strong><br>Usuario y Procedimientos.</div></li>
-                    <li><i class="fa-solid fa-chalkboard-user"></i><div><strong>Capacitador (1)</strong><br>Ejecutar plan de capacitación.</div></li>
-                </ul>
+                <h3 id="rrhh-title">RECURSOS HUMANOS (IGT)</h3>
+                <ul class="req-list" id="rrhh-list">
+                    </ul>
             </div>
         </aside>
 
         <main class="main-content">
-            <h2 class="section-title"><i class="fa-solid fa-file-signature"></i> Ciclo de Aprobación por Módulo</h2>
+            <h2 class="section-title"><i class="fa-solid fa-laptop-file"></i> Ciclo de Vida del Proyecto</h2>
             <div class="cycle-wrapper">
                 <div class="cycle-step dev">
-                    <div class="step-num">1</div><h4>Desarrollo</h4><p>Entrega y presentación.</p><div class="doc-tag"><i class="fa-solid fa-laptop-code"></i> Presentación Módulo</div>
+                    <div class="step-num">1</div><h4>Desarrollo</h4><p>DISI</p><div class="doc-tag" id="dev-cycle-tag"><i class="fa-solid fa-spinner fa-spin"></i> Calculando...</div>
                 </div><i class="fa-solid fa-chevron-right arrow-right"></i>
+                
                 <div class="cycle-step qa">
-                    <div class="step-num">2</div><h4>Validación QA</h4><p>Ejecución y doc. de pruebas.</p><div class="doc-tag"><i class="fa-solid fa-file-pen"></i> Formatos QA</div>
+                    <div class="step-num">2</div><h4>Validación QA</h4><p id="qa-resp">IGT</p><div class="doc-tag" style="background:#fee2e2; border-color:#fecaca; color:#b91c1c;"><i class="fa-solid fa-triangle-exclamation"></i> Pendiente</div>
                 </div><i class="fa-solid fa-chevron-right arrow-right"></i>
                 <div class="cycle-step train">
-                    <div class="step-num">3</div><h4>Capacitación</h4><p>Transferencia a usuarios.</p><div class="doc-tag"><i class="fa-solid fa-users-rectangle"></i> Listados Asistencia</div>
+                    <div class="step-num">3</div><h4>Capacitación</h4><p id="train-resp">IGT</p><div class="doc-tag"><i class="fa-solid fa-clock"></i> Pendiente</div>
                 </div><i class="fa-solid fa-chevron-right arrow-right"></i>
                 <div class="cycle-step prod">
-                    <div class="step-num">4</div><h4>Cierre / Aceptación</h4><p>Validación oficial PAM.</p><div class="doc-tag"><i class="fa-solid fa-envelope-open-text"></i> Oficio Validación</div>
+                    <div class="step-num">4</div><h4>Producción</h4><p id="prod-resp">IGT</p><div class="doc-tag"><i class="fa-solid fa-clock"></i> Pendiente</div>
                 </div>
             </div>
 
-            <h2 class="section-title"><i class="fa-solid fa-layer-group"></i> Actividades Estratégicas en Paralelo</h2>
-            <div class="parallel-grid">
-                <div class="parallel-card"><i class="fa-solid fa-database"></i><h5>Migración de datos del SIAM</h5><p>Traspaso de registros históricos.</p></div>
-                <div class="parallel-card"><i class="fa-solid fa-scale-balanced"></i><h5>Acuerdo Administrativo</h5><p>Gestión legal para respaldo.</p></div>
-                <div class="parallel-card"><i class="fa-solid fa-book-open"></i><h5>Creación del Manual de Usuario</h5><p>Documentación técnica.</p></div>
-                <div class="parallel-card"><i class="fa-solid fa-file-shield"></i><h5>Actualización del Manual de Procedimientos</h5><p>Normativa interna.</p></div>
-                <div class="parallel-card"><i class="fa-solid fa-bullhorn"></i><h5>Planificación para Campaña de Difusión</h5><p>Socialización del cambio.</p></div>
-            </div>
-
-            <h2 class="section-title" style="margin-top: 0px;"><i class="fa-solid fa-calendar-days"></i> Cronograma de Aprobación (Clic en fila para ver detalle)</h2>
+            <h2 class="section-title" style="margin-top: 10px;"><i class="fa-solid fa-list-check"></i> Estado por Módulo (Ponderado)</h2>
             <table class="dates-table">
                 <thead>
                     <tr>
-                        <th>Módulo</th><th style="width: 80px; text-align: center;">Avance</th><th>Desarrollo</th><th>Validación QA</th><th>Capacitación</th><th>Puesta en Producción</th>
+                        <th>Módulo</th><th style="width: 100px; text-align: center;">Avance General</th><th>Estado Desarrollo</th><th>Estado QA</th><th>Responsable Actual</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr onclick="showModuleDetails(1)">
-                        <td class="mod-name">1. Inscripción del Adulto Mayor</td><td class="perc-cell" style="color:#16a34a;">90%</td><td class="date-cell date-done">Finalizado</td><td class="date-cell" style="color: #94a3b8;">A definir</td><td class="date-cell" style="color: #94a3b8;">A definir</td><td class="prod-cell-merged" rowspan="5"><i class="fa-solid fa-rocket"></i><br>Lanzamiento Integral<br><span style="font-size: 11px; font-weight: 400; color: #166534;">Fecha a definir en reunión</span></td>
-                    </tr>
-                    <tr onclick="showModuleDetails(2)">
-                        <td class="mod-name">2. Estudio Socioeconómico y Notificaciones</td><td class="perc-cell">29%</td><td class="date-cell" style="color: #94a3b8;">A definir</td><td class="date-cell" style="color: #94a3b8;">A definir</td><td class="date-cell" style="color: #94a3b8;">A definir</td>
-                    </tr>
-                    <tr onclick="showModuleDetails(3)">
-                        <td class="mod-name">3. Jurídico</td><td class="perc-cell">26%</td><td class="date-cell" style="color: #94a3b8;">A definir</td><td class="date-cell" style="color: #94a3b8;">A definir</td><td class="date-cell" style="color: #94a3b8;">A definir</td>
-                    </tr>
-                    <tr onclick="showModuleDetails(4)">
-                        <td class="mod-name">4. Nómina</td><td class="perc-cell">25%</td><td class="date-cell" style="color: #94a3b8;">A definir</td><td class="date-cell" style="color: #94a3b8;">A definir</td><td class="date-cell" style="color: #94a3b8;">A definir</td>
-                    </tr>
-                    <tr onclick="showModuleDetails(5)">
-                        <td class="mod-name">5. Generación de Carnets</td><td class="perc-cell">72%</td><td class="date-cell" style="color: #94a3b8;">A definir</td><td class="date-cell" style="color: #94a3b8;">A definir</td><td class="date-cell" style="color: #94a3b8;">A definir</td>
-                    </tr>
-                </tbody>
+                <tbody id="table-body">
+                    </tbody>
             </table>
 
-            <!-- CONTENEDOR DE DETALLE (DINÁMICO) -->
             <div id="detail-container">
                 <div class="detail-header">
                     <div class="detail-title" id="detail-title">Desglose Técnico: Módulo</div>
                     <div class="detail-close" onclick="hideDetails()"><i class="fa-solid fa-times"></i></div>
                 </div>
                 <div id="detail-rows">
-                    <!-- Las barras se generarán aquí con JS -->
-                </div>
+                    </div>
             </div>
         </main>
 
         <footer class="footer-section">
-            <div class="timeline-mini">
-                <div class="t-step active"><i class="fa-solid fa-circle-check"></i><br>Módulo 1<br><span>Inscripción</span></div><div class="t-line done"></div>
-                <div class="t-step in-progress"><i class="fa-solid fa-spinner fa-spin"></i><br>Módulo 2<br><span>Estudio SE</span></div><div class="t-line half"></div>
-                <div class="t-step"><i class="fa-solid fa-gavel"></i><br>Módulo 3<br><span>Jurídico</span></div><div class="t-line"></div>
-                <div class="t-step in-progress"><i class="fa-solid fa-money-bill-wave"></i><br>Módulo 4<br><span>Nómina</span></div><div class="t-line"></div>
-                <div class="t-step"><i class="fa-regular fa-id-card"></i><br>Módulo 5<br><span>Carnets</span></div><div class="t-line"></div>
-                <div class="t-step"><i class="fa-solid fa-rocket"></i><br>Go-Live<br><span>Producción</span></div>
-            </div>
+            <div class="timeline-mini" id="mini-timeline">
+                </div>
         </footer>
     </div>
 
     <script>
-        const modulesData = {
-            1: {
-                name: "1. Inscripción del Adulto Mayor",
-                phases: [
-                    { name: "1. Recopilación de Requerimientos", pct: 100, resp: "Dirección de Sistemas de Información (DISI)" },
-                    { name: "2. Análisis y Diseño", pct: 100, resp: "Dirección de Sistemas de Información (DISI)" },
-                    { name: "3. Desarrollo", pct: 100, resp: "Dirección de Sistemas de Información (DISI)" },
-                    { name: "4. Pruebas de Aceptación (QA)", pct: 0, resp: "Programa de Aporte Económico del Adulto Mayor (PAM)" },
-                    { name: "5. Capacitación", pct: 0, resp: "Programa de Aporte Económico del Adulto Mayor (PAM)" },
-                    { name: "6. Implementación", pct: 0, resp: "Programa de Aporte Económico del Adulto Mayor (PAM)" }
-                ]
+        // === BASE DE DATOS DE PROYECTOS ===
+        const allProjectsData = {
+            "IGT": {
+                title: "Sistema Integrado de Inspección General de Trabajo - IGT",
+                qaResp: "IGT",
+                statusNote: "Siguiente Hito: Pruebas QA IGT",
+                rrhh: [
+                    { icon: "fa-user-check", text: "<strong>Equipo QA (IGT)</strong><br>Validación pendiente." },
+                    { icon: "fa-chalkboard-user", text: "<strong>Capacitación</strong><br>Coordinar fechas." },
+                    { icon: "fa-server", text: "<strong>Implementación</strong><br>Paso a producción." }
+                ],
+                modules: {
+                    1: {
+                        name: "Módulo 01: Recepción de la denuncia",
+                        phases: [
+                            { name: "1. Recopilación de Requerimientos", pct: 100, status: "FINALIZADO", resp: "DISI", weight: 0.30 },
+                            { name: "2. Análisis y Diseño", pct: 100, status: "FINALIZADO", resp: "DISI", weight: 0.30 },
+                            { name: "3. Desarrollo", pct: 100, status: "FINALIZADO", resp: "DISI", weight: 0.30 },
+                            { name: "4. Pruebas de Aceptación (QA)", pct: 0, status: "NO INICIADO", resp: "IGT", weight: 0.0333 },
+                            { name: "5. Capacitación", pct: 0, status: "NO INICIADO", resp: "IGT", weight: 0.0333 },
+                            { name: "6. Implementación", pct: 0, status: "NO INICIADO", resp: "IGT", weight: 0.0333 }
+                        ]
+                    },
+                    2: {
+                        name: "Módulo 02: Inspección de la denuncia",
+                        phases: [
+                            { name: "1. Recopilación de Requerimientos", pct: 100, status: "FINALIZADO", resp: "DISI", weight: 0.30 },
+                            { name: "2. Análisis y Diseño", pct: 100, status: "FINALIZADO", resp: "DISI", weight: 0.30 },
+                            { name: "3. Desarrollo", pct: 100, status: "FINALIZADO", resp: "DISI", weight: 0.30 },
+                            { name: "4. Pruebas de Aceptación (QA)", pct: 0, status: "NO INICIADO", resp: "IGT", weight: 0.0333 },
+                            { name: "5. Capacitación", pct: 0, status: "NO INICIADO", resp: "IGT", weight: 0.0333 },
+                            { name: "6. Implementación", pct: 0, status: "NO INICIADO", resp: "IGT", weight: 0.0333 }
+                        ]
+                    },
+                    3: {
+                        name: "Módulo 03: Verificación de la denuncia",
+                        devEndDate: "02 de Febrero 2026",
+                        phases: [
+                            { name: "1. Recopilación de Requerimientos", pct: 100, status: "FINALIZADO", resp: "DISI", weight: 0.30 },
+                            { name: "2. Análisis y Diseño", pct: 100, status: "FINALIZADO", resp: "DISI", weight: 0.30 },
+                            { name: "3. Desarrollo", pct: 60, status: "EN PROCESO", resp: "DISI", weight: 0.30 },
+                            { name: "4. Pruebas de Aceptación (QA)", pct: 0, status: "NO INICIADO", resp: "IGT", weight: 0.0333 },
+                            { name: "5. Capacitación", pct: 0, status: "NO INICIADO", resp: "IGT", weight: 0.0333 },
+                            { name: "6. Implementación", pct: 0, status: "NO INICIADO", resp: "IGT", weight: 0.0333 }
+                        ]
+                    },
+                    4: {
+                        name: "Módulo 04: Sanciones",
+                        devEndDate: "02 de Febrero 2026",
+                        phases: [
+                            { name: "1. Recopilación de Requerimientos", pct: 100, status: "FINALIZADO", resp: "DISI", weight: 0.30 },
+                            { name: "2. Análisis y Diseño", pct: 100, status: "FINALIZADO", resp: "DISI", weight: 0.30 },
+                            { name: "3. Desarrollo", pct: 60, status: "EN PROCESO", resp: "DISI", weight: 0.30 },
+                            { name: "4. Pruebas de Aceptación (QA)", pct: 0, status: "NO INICIADO", resp: "IGT", weight: 0.0333 },
+                            { name: "5. Capacitación", pct: 0, status: "NO INICIADO", resp: "IGT", weight: 0.0333 },
+                            { name: "6. Implementación", pct: 0, status: "NO INICIADO", resp: "IGT", weight: 0.0333 }
+                        ]
+                    },
+                    5: {
+                        name: "Módulo 05: Operativos",
+                        devEndDate: "02 de Febrero 2026",
+                        phases: [
+                            { name: "1. Recopilación de Requerimientos", pct: 100, status: "FINALIZADO", resp: "DISI", weight: 0.30 },
+                            { name: "2. Análisis y Diseño", pct: 100, status: "FINALIZADO", resp: "DISI", weight: 0.30 },
+                            { name: "3. Desarrollo", pct: 60, status: "EN PROCESO", resp: "DISI", weight: 0.30 },
+                            { name: "4. Pruebas de Aceptación (QA)", pct: 0, status: "NO INICIADO", resp: "IGT", weight: 0.0333 },
+                            { name: "5. Capacitación", pct: 0, status: "NO INICIADO", resp: "IGT", weight: 0.0333 },
+                            { name: "6. Implementación", pct: 0, status: "NO INICIADO", resp: "IGT", weight: 0.0333 }
+                        ]
+                    }
+                }
             },
-            2: {
-                name: "2. Estudio Socioeconómico y Notificaciones",
-                phases: [
-                    { name: "1. Recopilación de Requerimientos", pct: 80, resp: "Dirección de Sistemas de Información (DISI)" },
-                    { name: "2. Análisis y Diseño", pct: 10, resp: "Dirección de Sistemas de Información (DISI)" },
-                    { name: "3. Desarrollo", pct: 5, resp: "Dirección de Sistemas de Información (DISI)" },
-                    { name: "4. Pruebas de Aceptación (QA)", pct: 0, resp: "Programa de Aporte Económico del Adulto Mayor (PAM)" },
-                    { name: "5. Capacitación", pct: 0, resp: "Programa de Aporte Económico del Adulto Mayor (PAM)" },
-                    { name: "6. Implementación", pct: 0, resp: "Programa de Aporte Económico del Adulto Mayor (PAM)" }
-                ]
-            },
-            3: {
-                name: "3. Jurídico",
-                phases: [
-                    { name: "1. Recopilación de Requerimientos", pct: 80, resp: "Dirección de Sistemas de Información (DISI)" },
-                    { name: "2. Análisis y Diseño", pct: 5, resp: "Dirección de Sistemas de Información (DISI)" },
-                    { name: "3. Desarrollo", pct: 3, resp: "Dirección de Sistemas de Información (DISI)" },
-                    { name: "4. Pruebas de Aceptación (QA)", pct: 0, resp: "Programa de Aporte Económico del Adulto Mayor (PAM)" },
-                    { name: "5. Capacitación", pct: 0, resp: "Programa de Aporte Económico del Adulto Mayor (PAM)" },
-                    { name: "6. Implementación", pct: 0, resp: "Programa de Aporte Económico del Adulto Mayor (PAM)" }
-                ]
-            },
-            4: {
-                name: "4. Nómina",
-                phases: [
-                    { name: "1. Recopilación de Requerimientos", pct: 80, resp: "Dirección de Sistemas de Información (DISI)" },
-                    { name: "2. Análisis y Diseño", pct: 0, resp: "Dirección de Sistemas de Información (DISI)" },
-                    { name: "3. Desarrollo", pct: 3, resp: "Dirección de Sistemas de Información (DISI)" },
-                    { name: "4. Pruebas de Aceptación (QA)", pct: 0, resp: "Programa de Aporte Económico del Adulto Mayor (PAM)" },
-                    { name: "5. Capacitación", pct: 0, resp: "Programa de Aporte Económico del Adulto Mayor (PAM)" },
-                    { name: "6. Implementación", pct: 0, resp: "Programa de Aporte Económico del Adulto Mayor (PAM)" }
-                ]
-            },
-            5: {
-                name: "5. Generación de Carnets",
-                phases: [
-                    { name: "1. Recopilación de Requerimientos", pct: 80, resp: "Dirección de Sistemas de Información (DISI)" },
-                    { name: "2. Análisis y Diseño", pct: 80, resp: "Dirección de Sistemas de Información (DISI)" },
-                    { name: "3. Desarrollo", pct: 80, resp: "Dirección de Sistemas de Información (DISI)" },
-                    { name: "4. Pruebas de Aceptación (QA)", pct: 0, resp: "Programa de Aporte Económico del Adulto Mayor (PAM)" },
-                    { name: "5. Capacitación", pct: 0, resp: "Programa de Aporte Económico del Adulto Mayor (PAM)" },
-                    { name: "6. Implementación", pct: 0, resp: "Programa de Aporte Económico del Adulto Mayor (PAM)" }
-                ]
+            "PAM": {
+                title: "Programa de Aporte Económico del Adulto Mayor - PAM",
+                qaResp: "PAM",
+                statusNote: "Siguiente Hito: Aval QA Módulo 1",
+                rrhh: [
+                    { icon: "fa-users-viewfinder", text: "<strong>Pruebas QA (PAM)</strong><br>Validación funcional." },
+                    { icon: "fa-book-open", text: "<strong>Manuales</strong><br>Usuario y Procedimientos." },
+                    { icon: "fa-chalkboard-user", text: "<strong>Capacitador</strong><br>Plan de capacitación." }
+                ],
+                modules: {
+                    1: {
+                        name: "Módulo 01: Inscripción del Adulto Mayor",
+                        phases: [
+                            { name: "1. Recopilación de Requerimientos", pct: 100, status: "FINALIZADO", resp: "DISI", weight: 0.30 },
+                            { name: "2. Análisis y Diseño", pct: 100, status: "FINALIZADO", resp: "DISI", weight: 0.30 },
+                            { name: "3. Desarrollo", pct: 100, status: "FINALIZADO", resp: "DISI", weight: 0.30 },
+                            { name: "4. Pruebas de Aceptación (QA)", pct: 0, status: "NO INICIADO", resp: "PAM", weight: 0.0333 },
+                            { name: "5. Capacitación", pct: 0, status: "NO INICIADO", resp: "PAM", weight: 0.0333 },
+                            { name: "6. Implementación", pct: 0, status: "NO INICIADO", resp: "PAM", weight: 0.0333 }
+                        ]
+                    },
+                    2: {
+                        name: "Módulo 02: Estudio Socioeconómico",
+                        phases: [
+                            { name: "1. Recopilación de Requerimientos", pct: 80, status: "EN PROCESO", resp: "DISI", weight: 0.30 },
+                            { name: "2. Análisis y Diseño", pct: 10, status: "EN PROCESO", resp: "DISI", weight: 0.30 },
+                            { name: "3. Desarrollo", pct: 5, status: "EN PROCESO", resp: "DISI", weight: 0.30 },
+                            { name: "4. Pruebas de Aceptación (QA)", pct: 0, status: "NO INICIADO", resp: "PAM", weight: 0.0333 },
+                            { name: "5. Capacitación", pct: 0, status: "NO INICIADO", resp: "PAM", weight: 0.0333 },
+                            { name: "6. Implementación", pct: 0, status: "NO INICIADO", resp: "PAM", weight: 0.0333 }
+                        ]
+                    },
+                    3: {
+                        name: "Módulo 03: Jurídico",
+                        phases: [
+                            { name: "1. Recopilación de Requerimientos", pct: 80, status: "EN PROCESO", resp: "DISI", weight: 0.30 },
+                            { name: "2. Análisis y Diseño", pct: 5, status: "EN PROCESO", resp: "DISI", weight: 0.30 },
+                            { name: "3. Desarrollo", pct: 3, status: "EN PROCESO", resp: "DISI", weight: 0.30 },
+                            { name: "4. Pruebas de Aceptación (QA)", pct: 0, status: "NO INICIADO", resp: "PAM", weight: 0.0333 },
+                            { name: "5. Capacitación", pct: 0, status: "NO INICIADO", resp: "PAM", weight: 0.0333 },
+                            { name: "6. Implementación", pct: 0, status: "NO INICIADO", resp: "PAM", weight: 0.0333 }
+                        ]
+                    },
+                    4: {
+                        name: "Módulo 04: Nómina",
+                        phases: [
+                            { name: "1. Recopilación de Requerimientos", pct: 80, status: "EN PROCESO", resp: "DISI", weight: 0.30 },
+                            { name: "2. Análisis y Diseño", pct: 0, status: "NO INICIADO", resp: "DISI", weight: 0.30 },
+                            { name: "3. Desarrollo", pct: 0, status: "NO INICIADO", resp: "DISI", weight: 0.30 },
+                            { name: "4. Pruebas de Aceptación (QA)", pct: 0, status: "NO INICIADO", resp: "PAM", weight: 0.0333 },
+                            { name: "5. Capacitación", pct: 0, status: "NO INICIADO", resp: "PAM", weight: 0.0333 },
+                            { name: "6. Implementación", pct: 0, status: "NO INICIADO", resp: "PAM", weight: 0.0333 }
+                        ]
+                    },
+                    5: {
+                        name: "Módulo 05: Generación de Carnets",
+                        phases: [
+                            { name: "1. Recopilación de Requerimientos", pct: 80, status: "EN PROCESO", resp: "DISI", weight: 0.30 },
+                            { name: "2. Análisis y Diseño", pct: 80, status: "EN PROCESO", resp: "DISI", weight: 0.30 },
+                            { name: "3. Desarrollo", pct: 80, status: "EN PROCESO", resp: "DISI", weight: 0.30 },
+                            { name: "4. Pruebas de Aceptación (QA)", pct: 0, status: "NO INICIADO", resp: "PAM", weight: 0.0333 },
+                            { name: "5. Capacitación", pct: 0, status: "NO INICIADO", resp: "PAM", weight: 0.0333 },
+                            { name: "6. Implementación", pct: 0, status: "NO INICIADO", resp: "PAM", weight: 0.0333 }
+                        ]
+                    }
+                }
             }
         };
+
+        // Variable global para el proyecto actual
+        let currentProjectKey = "IGT";
+        let modulesData = allProjectsData[currentProjectKey].modules;
+
+        // Función para cambiar de proyecto desde el Select
+        function changeProject(key) {
+            currentProjectKey = key;
+            modulesData = allProjectsData[key].modules; // Actualizar referencia de modulos
+            hideDetails();
+            renderAll();
+        }
+
+        function calculateTotalProgress(phases) {
+            let total = 0;
+            phases.forEach(p => {
+                total += (p.pct * p.weight);
+            });
+            return Math.min(Math.round(total), 100);
+        }
+
+        // Renderiza el promedio de desarrollo en el diagrama de ciclo
+        function updateDevelopmentStats() {
+            let totalDev = 0;
+            const totalModules = Object.keys(modulesData).length;
+            
+            for (const [key, mod] of Object.entries(modulesData)) {
+                // La fase 2 (indice 2) es Desarrollo
+                totalDev += mod.phases[2].pct;
+            }
+            
+            const avgDev = Math.round(totalDev / totalModules);
+            
+            // Insertar en la etiqueta del ciclo 1
+            const devTag = document.getElementById('dev-cycle-tag');
+            devTag.innerHTML = `<i class="fa-solid fa-check"></i> ${avgDev}% Avance`;
+            
+            // Si el avance es alto, ponerlo verde, si es medio naranja
+            if (avgDev >= 90) {
+                devTag.style.color = "#166534";
+                devTag.style.background = "#dcfce7";
+                devTag.style.border = "1px solid #bbf7d0";
+            } else if (avgDev >= 50) {
+                devTag.style.color = "#b45309";
+                devTag.style.background = "#fffbeb";
+                devTag.style.border = "1px solid #fcd34d";
+            } else {
+                devTag.style.color = "#64748b";
+                devTag.style.background = "#f1f5f9";
+                devTag.style.border = "1px solid #cbd5e1";
+            }
+        }
+
+        // Renderiza las estadisticas globales en la sidebar
+        function updateGlobalStats() {
+            let totalProjectPct = 0;
+            const totalModules = Object.keys(modulesData).length;
+            
+            for (const [key, mod] of Object.entries(modulesData)) {
+                totalProjectPct += calculateTotalProgress(mod.phases);
+            }
+            
+            const globalAvg = Math.round(totalProjectPct / totalModules);
+            
+            const displayEl = document.getElementById('global-pct-display');
+            displayEl.innerText = globalAvg + "%";
+            
+            if(globalAvg > 80) displayEl.style.color = "#16a34a";
+            else if(globalAvg > 50) displayEl.style.color = "#002855";
+            else displayEl.style.color = "#d97706";
+        }
+
+        // Actualiza Textos Generales (Titulo, RRHH, Ciclos)
+        function updateStaticTexts() {
+            const data = allProjectsData[currentProjectKey];
+            
+            // Header
+            document.getElementById('project-title').innerText = data.title;
+            
+            // Sidebar
+            document.getElementById('status-note').innerText = data.statusNote;
+            document.getElementById('rrhh-title').innerText = `RECURSOS HUMANOS (${currentProjectKey})`;
+            
+            // RRHH Lista
+            const rrhhList = document.getElementById('rrhh-list');
+            let rrhhHtml = '';
+            data.rrhh.forEach(item => {
+                rrhhHtml += `<li><i class="fa-solid ${item.icon}"></i><div>${item.text}</div></li>`;
+            });
+            rrhhList.innerHTML = rrhhHtml;
+
+            // Ciclo Diagrama (Responsables)
+            document.getElementById('qa-resp').innerText = data.qaResp;
+            document.getElementById('train-resp').innerText = data.qaResp;
+            document.getElementById('prod-resp').innerText = data.qaResp;
+
+            // Mini Footer Timeline
+            const miniTime = document.getElementById('mini-timeline');
+            let timeHtml = '';
+            const modKeys = Object.keys(modulesData);
+            modKeys.forEach((key, index) => {
+                let statusClass = 't-step'; // default
+                let lineClass = 't-line'; // default
+                const mod = modulesData[key];
+                const pct = calculateTotalProgress(mod.phases);
+                
+                if(pct >= 90) statusClass += ' active';
+                else if(pct > 20) statusClass += ' in-progress';
+
+                if(pct >= 90) lineClass += ' done';
+                else if(pct > 20) lineClass += ' half';
+
+                // Nombre corto modulo
+                let shortName = mod.name.split(':')[0].replace('Módulo ', 'Mod ');
+
+                timeHtml += `<div class="${statusClass}"><i class="fa-solid fa-cube"></i><br>${shortName}<br><span>${pct}%</span></div>`;
+                
+                if(index < modKeys.length - 1) {
+                    timeHtml += `<div class="${lineClass}"></div>`;
+                }
+            });
+            miniTime.innerHTML = timeHtml;
+        }
+
+        // Renderiza la tabla principal
+        function renderTable() {
+            const tbody = document.getElementById('table-body');
+            let html = '';
+            
+            for (const [id, mod] of Object.entries(modulesData)) {
+                const totalPct = calculateTotalProgress(mod.phases);
+                const devPhase = mod.phases[2]; // Desarrollo
+                const qaPhase = mod.phases[3]; // QA
+                const data = allProjectsData[currentProjectKey]; // Project data for QA resp
+
+                let pctColor = '#005eb8';
+                if(totalPct >= 90) pctColor = '#16a34a'; // Verde
+                else if(totalPct < 50) pctColor = '#b45309'; // Naranja oscuro
+
+                let devColor = devPhase.status === 'FINALIZADO' ? 'date-done' : '#f59e0b';
+                let qaColor = qaPhase.status === 'NO INICIADO' ? '#ef4444' : (qaPhase.status === 'EN PROCESO' ? '#f59e0b' : '#16a34a');
+                
+                let resp = 'DISI';
+                if (devPhase.status === 'FINALIZADO' && qaPhase.status === 'NO INICIADO') resp = `${data.qaResp} (QA)`;
+                else if (devPhase.status === 'FINALIZADO' && qaPhase.status === 'EN PROCESO') resp = `${data.qaResp} (QA)`;
+                else if (devPhase.status === 'EN PROCESO') resp = 'DISI';
+
+                html += `
+                    <tr onclick="showModuleDetails(${id})">
+                        <td class="mod-name">${mod.name}</td>
+                        <td class="perc-cell" style="color:${pctColor};">${totalPct}%</td>
+                        <td class="date-cell ${devPhase.status === 'FINALIZADO' ? 'date-done' : ''}" style="color:${devPhase.status !== 'FINALIZADO' ? '#f59e0b' : ''}">${devPhase.status}</td>
+                        <td class="date-cell" style="color:${qaColor};">${qaPhase.status}</td>
+                        <td class="date-cell">${resp}</td>
+                    </tr>
+                `;
+            }
+            tbody.innerHTML = html;
+        }
 
         function showModuleDetails(moduleId) {
             const container = document.getElementById('detail-container');
@@ -428,35 +668,42 @@
             const rowsEl = document.getElementById('detail-rows');
             const module = modulesData[moduleId];
 
-            titleEl.textContent = "Desglose Técnico: " + module.name;
+            titleEl.textContent = module.name;
 
             let html = '';
             module.phases.forEach(phase => {
                 let badgeClass = 'st-pending';
-                let badgeText = 'NO INICIADO';
                 let fillClass = '';
                 
-                if(phase.pct === 100) {
+                if(phase.status === "FINALIZADO") {
                     badgeClass = 'st-done';
-                    badgeText = 'FINALIZADO';
                     fillClass = 'green';
-                } else if(phase.pct > 0) {
+                } else if(phase.status === "EN PROCESO") {
                     badgeClass = 'st-process';
-                    badgeText = 'EN PROCESO';
+                }
+
+                const pesoVisual = Math.round(phase.weight * 100);
+                
+                let extraInfo = '';
+                if(phase.name.includes("Desarrollo") && module.devEndDate && phase.status !== "FINALIZADO") {
+                    extraInfo = `<div style="font-size:11px; color:#dc2626; margin-top:2px; font-weight:700;"><i class="fa-regular fa-calendar-xmark"></i> Fin Desarrollo: ${module.devEndDate}</div>`;
                 }
 
                 html += `
                 <div class="detail-row">
                     <div class="detail-info">
-                        <span>${phase.name}</span>
-                        <span class="status-badge ${badgeClass}">${badgeText}</span>
+                        <span>${phase.name} <span style="font-size:10px; color:#64748b; font-weight:400;">(Ponderación: ~${pesoVisual}%)</span></span>
+                        <span class="status-badge ${badgeClass}">${phase.status}</span>
                     </div>
                     <div class="phase-track">
                         <div class="phase-fill ${fillClass}" style="width: ${phase.pct}%"></div>
                     </div>
-                    <div style="display:flex; justify-content:space-between; align-items:center;">
-                        <span class="detail-resp">Responsable: ${phase.resp}</span>
-                        <span style="font-size:12px; font-weight:700; color:#002855;">${phase.pct}%</span>
+                    <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-top:2px;">
+                        <div>
+                            <span class="detail-resp">Responsable: ${phase.resp}</span>
+                            ${extraInfo}
+                        </div>
+                        <span style="font-size:12px; font-weight:700; color:#002855;">${phase.pct}% Completado</span>
                     </div>
                 </div>
                 `;
@@ -470,6 +717,17 @@
         function hideDetails() {
             document.getElementById('detail-container').style.display = 'none';
         }
+
+        // Función Maestra de Renderizado
+        function renderAll() {
+            updateStaticTexts();
+            updateGlobalStats();
+            updateDevelopmentStats();
+            renderTable();
+        }
+
+        // Inicializar
+        renderAll();
     </script>
 </body>
 </html>

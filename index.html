@@ -3,366 +3,425 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Unificado - MINTRAB 2025</title>
-    <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <title>Tablero de Control - MINTRAB 2025</title>
+    <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        /* --- ESTILOS VISUALES (CSS) --- */
-        * { box-sizing: border-box; }
+        /* --- ESTILOS GENERALES --- */
+        * { box-sizing: border-box; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); }
 
         :root {
-            --primary: #002855; 
+            --primary: #002F5D; /* Azul Institucional */
+            --primary-light: #004a8f;
             --accent: #005eb8; 
             --warning: #f59e0b; 
             --success: #16a34a; 
             --text: #334155;    
             --bg-gray: #f8fafc;
-            --hover-row: #e0f2fe;
-            --train-color: #0891b2; /* Color Teal para Capacitación */
+            --card-shadow: 0 10px 30px -5px rgba(0, 47, 93, 0.15);
         }
 
         body {
             font-family: 'Urbanist', sans-serif;
-            background-color: #cbd5e1;
+            background-color: #f1f5f9;
             margin: 0;
-            padding: 20px;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        /* --- SECCIÓN HERO (TABLERO DE CONTROL) --- */
+        .hero-section {
             min-height: 100vh;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
             display: flex;
+            flex-direction: column;
+            align-items: center;
             justify-content: center;
+            padding: 40px 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Elementos decorativos de fondo */
+        .hero-blob {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            filter: blur(60px);
+        }
+        .blob-1 { width: 300px; height: 300px; top: -50px; left: -50px; }
+        .blob-2 { width: 400px; height: 400px; bottom: -100px; right: -50px; }
+
+        .hero-content {
+            z-index: 10;
+            text-align: center;
+            max-width: 1200px;
+            width: 100%;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        .hero-icon {
+            background: rgba(255, 255, 255, 0.1);
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px auto;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        .hero-icon i { font-size: 32px; color: white; }
+
+        .hero-title {
+            font-size: 48px;
+            font-weight: 800;
+            color: white;
+            margin: 0 0 10px 0;
+            letter-spacing: -1px;
+            text-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        .hero-subtitle {
+            font-size: 18px;
+            color: #e2e8f0;
+            font-weight: 300;
+            margin-bottom: 50px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* GRID DE PROYECTOS */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+            width: 100%;
+            margin-bottom: 40px;
+        }
+
+        .project-card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            cursor: pointer;
+            position: relative;
+            border: 2px solid transparent;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            text-align: left;
+            transform: translateY(0);
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        .project-card.active {
+            border-color: #38bdf8; /* Celeste brillante */
+            box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.3);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: #f1f5f9;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+        
+        .project-card:hover .card-icon {
+            background: var(--primary);
+            color: white;
+        }
+
+        .card-status {
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+            padding: 4px 8px;
+            border-radius: 6px;
+        }
+        .status-progress { background: #dbeafe; color: #1e40af; }
+        .status-final { background: #dcfce7; color: #166534; }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--text);
+            margin: 0 0 5px 0;
+        }
+
+        .card-desc {
+            font-size: 12px;
+            color: #64748b;
+            margin-bottom: 20px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .progress-container {
+            width: 100%;
+            height: 8px;
+            background: #f1f5f9;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: var(--primary);
+            border-radius: 10px;
+            width: 0%; /* Animado por JS */
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            font-weight: 600;
+            color: #64748b;
+        }
+
+        /* --- DASHBOARD DETALLADO (SECCIÓN INFERIOR) --- */
+        #dashboard-view {
+            display: none; /* Oculto inicialmente */
+            padding: 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+            opacity: 0;
+            transform: translateY(20px);
         }
 
         .one-pager {
             background-color: white;
             width: 100%;
-            max-width: 100%; 
-            min-height: 90vh; 
             padding: 40px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            border-radius: 24px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.05);
             display: grid;
-            grid-template-columns: 300px 1fr;
-            grid-template-rows: auto auto 1fr auto; 
-            gap: 30px; 
-            border-top: 15px solid var(--primary);
-            position: relative;
+            grid-template-columns: 320px 1fr;
+            grid-template-rows: auto 1fr auto; 
+            gap: 40px; 
+            border-top: 10px solid var(--primary);
         }
 
-        /* SELECTOR DE PROYECTO */
-        .project-selector-container {
-            grid-column: 1 / -1;
-            background: #f1f5f9;
-            padding: 15px;
-            border-radius: 8px;
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            gap: 15px;
-            border: 1px solid #e2e8f0;
-        }
-        
-        .project-selector-container label {
-            font-weight: 700;
-            color: var(--primary);
-            font-size: 14px;
-        }
+        /* REUTILIZACIÓN DE ESTILOS ANTERIORES PARA EL DASHBOARD */
+        .header { grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #e2e8f0; padding-bottom: 20px; margin-bottom: 10px; }
+        .header h1 { margin: 0; font-size: 32px; color: var(--primary); font-weight: 800; }
+        .header .meta { text-align: right; font-size: 14px; color: #64748b; }
 
-        .project-select {
-            padding: 10px 15px;
-            font-family: 'Urbanist', sans-serif;
-            font-size: 16px;
-            font-weight: 700;
-            color: var(--primary);
-            border: 2px solid var(--accent);
-            border-radius: 6px;
-            background-color: white;
-            cursor: pointer;
-            outline: none;
-        }
-        .project-select:hover {
-            background-color: #f8fafc;
-        }
-
-        /* HEADER */
-        .header {
-            grid-column: 1 / -1;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 2px solid #e2e8f0;
-            padding-bottom: 20px;
-            margin-bottom: 10px;
-        }
-        .header h1 {
-            margin: 0;
-            font-size: 32px;
-            color: var(--primary);
-            text-transform: uppercase;
-            letter-spacing: -0.5px;
-            font-weight: 800;
-            line-height: 1.2;
-            max-width: 800px;
-        }
-        .header .meta {
-            text-align: right;
-            font-size: 14px;
-            color: #64748b;
-            min-width: 250px;
-        }
-
-        /* SIDEBAR */
-        .sidebar {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-        .status-card {
-            background: #f0fdf4;
-            border: 2px solid var(--success);
-            padding: 20px;
-            border-radius: 12px;
-            text-align: center;
-            transition: all 0.3s ease;
-        }
-        .status-card h3 { color: #166534; margin: 0 0 10px 0; font-size: 18px; }
-        .status-card .big-icon { font-size: 60px; color: var(--success); margin: 10px 0; }
-        .status-card p { font-size: 14px; font-weight: bold; color: #14532d; margin: 0; line-height: 1.4; }
-        
-        .global-pct {
-            font-size: 42px;
-            font-weight: 800;
-            color: var(--primary);
-            margin: 10px 0;
-            display: block;
-        }
-
-        .req-card {
-            background: #fffbeb;
-            border: 1px solid #fcd34d;
-            border-radius: 12px;
-            padding: 20px;
-        }
-        .req-card h3 { color: #b45309; margin: 0 0 15px 0; font-size: 16px; border-bottom: 1px solid #fcd34d; padding-bottom: 5px; }
+        .sidebar { display: flex; flex-direction: column; gap: 20px; }
+        .status-card-detail { background: #f0fdf4; border: 2px solid var(--success); padding: 20px; border-radius: 12px; text-align: center; }
+        .req-card { background: #fffbeb; border: 1px solid #fcd34d; border-radius: 12px; padding: 20px; }
         .req-list { list-style: none; padding: 0; margin: 0; }
-        .req-list li {
-            margin-bottom: 15px;
-            display: flex;
-            align-items: flex-start;
-            font-size: 14px;
-            color: #78350f;
-        }
+        .req-list li { margin-bottom: 15px; display: flex; align-items: flex-start; font-size: 14px; color: #78350f; }
         .req-list i { margin-right: 10px; margin-top: 3px; color: #d97706; }
 
-        /* MAIN CONTENT */
-        .main-content {
-            background: var(--bg-gray);
-            border-radius: 12px;
-            padding: 30px;
-            border: 1px solid #e2e8f0;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .section-title {
-            color: var(--primary);
-            font-size: 18px;
-            margin-top: 0;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            font-weight: 700;
-            border-bottom: 1px solid #e2e8f0;
-            padding-bottom: 10px;
-        }
+        .main-content { background: #f8fafc; border-radius: 12px; padding: 30px; border: 1px solid #e2e8f0; display: flex; flex-direction: column; }
+        .section-title { color: var(--primary); font-size: 18px; margin-top: 0; margin-bottom: 20px; display: flex; align-items: center; font-weight: 700; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px; }
         .section-title i { margin-right: 10px; color: var(--accent); }
 
-        /* Cycle Diagram */
-        .cycle-wrapper {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 30px;
-        }
-        .cycle-step {
-            flex: 1;
-            background: white;
-            padding: 15px 15px 35px 15px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            position: relative;
-            border: 1px solid #e2e8f0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+        .cycle-wrapper { display: flex; gap: 15px; margin-bottom: 30px; flex-wrap: wrap; }
+        .cycle-step { flex: 1; background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); position: relative; border: 1px solid #e2e8f0; display: flex; flex-direction: column; align-items: center; min-width: 150px; }
         .cycle-step.dev { border-top: 4px solid var(--accent); }
         .cycle-step.qa { border-top: 4px solid var(--warning); }
-        .cycle-step.train { border-top: 4px solid var(--train-color); }
-        .cycle-step.train .step-num { background: var(--train-color); }
+        .cycle-step.train { border-top: 4px solid #0891b2; }
         .cycle-step.prod { border-top: 4px solid var(--success); }
         
-        .step-num { 
-            position: absolute; top: -10px; right: 10px; 
-            background: var(--text); color: white; width: 24px; height: 24px; border-radius: 50%; 
-            display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold;
-        }
+        .step-num { position: absolute; top: -10px; right: 10px; background: var(--text); color: white; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; }
         .cycle-step.dev .step-num { background: var(--accent); }
         .cycle-step.qa .step-num { background: var(--warning); }
+        .cycle-step.train .step-num { background: #0891b2; }
         .cycle-step.prod .step-num { background: var(--success); }
 
-        .cycle-step h4 { margin: 10px 0 5px 0; font-size: 15px; color: var(--text); text-align: center; font-weight: 700; text-transform: uppercase;}
-        .cycle-step p { font-size: 12px; color: #64748b; line-height: 1.3; margin: 0; text-align: center; }
-        .arrow-right { align-self: center; color: #cbd5e1; font-size: 20px; }
-        .doc-tag {
-            position: absolute; bottom: 10px; background: #f1f5f9; color: #475569; font-size: 10px; padding: 3px 8px; border-radius: 10px; border: 1px solid #cbd5e1; display: flex; align-items: center; gap: 4px; font-weight: 600;
-        }
-        .doc-tag i { color: var(--primary); }
+        .cycle-step h4 { margin: 10px 0 5px 0; font-size: 14px; text-align: center; font-weight: 700; text-transform: uppercase; }
+        .cycle-step p { font-size: 11px; color: #64748b; margin: 0; text-align: center; }
+        .doc-tag { position: absolute; bottom: 10px; background: #f1f5f9; color: #475569; font-size: 10px; padding: 3px 8px; border-radius: 10px; display: flex; align-items: center; gap: 4px; font-weight: 600; }
 
-        /* Cronograma Table */
         .dates-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 10px; cursor: pointer; }
-        .dates-table th { text-align: left; padding: 10px; background-color: var(--primary); color: white; font-weight: 600; text-transform: uppercase; font-size: 11px; border: 1px solid var(--primary); }
+        .dates-table th { text-align: left; padding: 10px; background-color: var(--primary); color: white; font-weight: 600; text-transform: uppercase; font-size: 11px; }
         .dates-table td { padding: 10px; border: 1px solid #e2e8f0; color: var(--text); vertical-align: middle; }
         .dates-table tr:nth-child(even) { background-color: #f8fafc; }
-        .date-cell { font-family: monospace; font-weight: 600; color: var(--primary); }
-        .date-done { color: #94a3b8; text-decoration: line-through; }
-        .mod-name { font-weight: 700; width: 30%; } 
-        .perc-cell { font-weight: 800; text-align: center; color: var(--accent); background-color: #f0f9ff; width: 80px; }
+        .dates-table tbody tr:hover { background-color: #e0f2fe !important; transform: translateX(5px); }
 
-        /* Efecto Hover para Cronograma */
-        .dates-table tbody tr:hover {
-            background-color: var(--hover-row) !important;
-            transform: translateX(5px);
-            transition: all 0.2s ease;
-            box-shadow: -4px 4px 6px rgba(0,0,0,0.05);
-            position: relative;
-            z-index: 10;
-            border-left: 4px solid var(--accent);
-        }
-
-        /* SECCION DE DETALLES (OCULTA POR DEFECTO) */
-        #detail-container {
-            background: white;
-            border: 2px solid var(--accent);
-            border-radius: 12px;
-            padding: 25px;
-            margin-top: 20px; /* Separacion del cronograma */
-            display: none; /* Oculto inicialmente */
-            animation: fadeIn 0.5s;
-        }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-
-        .detail-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid #e2e8f0; }
-        .detail-title { font-size: 20px; font-weight: 800; color: var(--primary); }
-        .detail-close { cursor: pointer; color: #64748b; font-size: 20px; }
-        .detail-close:hover { color: #ef4444; }
-
+        /* Detalles */
+        #detail-container { background: white; border: 2px solid var(--accent); border-radius: 12px; padding: 25px; margin-top: 20px; display: none; animation: fadeIn 0.5s; }
         .detail-row { display: flex; flex-direction: column; margin-bottom: 15px; }
-        .detail-info { display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 13px; font-weight: 600; color: var(--text); }
-        .detail-resp { font-size: 11px; color: #64748b; font-weight: 400; margin-top: 2px; }
-        
-        .phase-track { background: #e2e8f0; height: 12px; border-radius: 6px; overflow: hidden; width: 100%; position: relative; }
-        .phase-fill { height: 100%; background: var(--primary); width: 0%; transition: width 1s ease-in-out; border-radius: 6px; }
+        .detail-info { display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 13px; font-weight: 600; }
+        .phase-track { background: #e2e8f0; height: 12px; border-radius: 6px; overflow: hidden; width: 100%; }
+        .phase-fill { height: 100%; background: var(--primary); width: 0%; transition: width 1s ease-in-out; }
         .phase-fill.green { background: var(--success); }
-        
-        .status-badge { font-size: 10px; padding: 2px 8px; border-radius: 10px; text-transform: uppercase; font-weight: bold; margin-left: 10px; }
+        .status-badge { font-size: 10px; padding: 2px 8px; border-radius: 10px; text-transform: uppercase; font-weight: bold; }
         .st-done { background: #dcfce7; color: #166534; }
         .st-process { background: #dbeafe; color: #1e40af; }
         .st-pending { background: #f1f5f9; color: #64748b; }
 
-        /* Footer */
-        .footer-section { grid-column: 1 / -1; display: flex; flex-direction: column; gap: 20px; }
-        .timeline-mini { display: flex; align-items: flex-start; justify-content: space-between; background: white; padding: 25px 15px; border-radius: 8px; border: 1px solid #e2e8f0; }
-        .t-step { text-align: center; font-size: 12px; color: #94a3b8; font-weight: 600; width: 130px; position: relative; flex-shrink: 0; }
-        .t-step i { font-size: 16px; margin-bottom: 5px; }
-        .t-step.active { color: var(--success); }
-        .t-step.in-progress { color: var(--accent); }
-        .t-step span { display: block; font-size: 10px; font-weight: 400; color: #64748b; margin-top: 4px; line-height: 1.3;}
-        .t-line { flex-grow: 1; height: 2px; background: #e2e8f0; margin: 10px 0 0 0; position: relative; }
-        .t-line.done::after { content: ''; position: absolute; left: 0; top: 0; height: 100%; width: 100%; background: var(--success); }
-        .t-line.half::after { content: ''; position: absolute; left: 0; top: 0; height: 100%; width: 50%; background: var(--accent); }
+        /* ANIMACIONES */
+        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         @media (max-width: 1024px) {
-            .one-pager { grid-template-columns: 1fr; width: 100%; padding: 20px; }
-            .cycle-wrapper { flex-wrap: wrap; }
-            .timeline-mini { overflow-x: auto; }
+            .one-pager { grid-template-columns: 1fr; padding: 20px; }
+            .hero-title { font-size: 36px; }
         }
     </style>
 </head>
 <body>
 
-    <div class="one-pager">
-        <div class="project-selector-container">
-            <label for="projectSelect"><i class="fa-solid fa-layer-group"></i> Seleccionar Proyecto:</label>
-            <select id="projectSelect" class="project-select" onchange="changeProject(this.value)">
-                <option value="IGT">IGT - Inspección General</option>
-                <option value="PAM">PAM - Adulto Mayor</option>
-            </select>
-        </div>
+    <div class="hero-section">
+        <div class="hero-blob blob-1"></div>
+        <div class="hero-blob blob-2"></div>
 
-        <header class="header">
-            <div><h1 id="project-title">Inspección General de Trabajo - IGT</h1></div>
-            <div class="meta" id="project-meta"><strong>MINTRAB 2025</strong><br>Dirección de Sistemas de Información DISI</div>
-        </header>
-
-        <aside class="sidebar">
-            <div class="status-card" id="status-card-bg">
-                <h3>ESTADO GLOBAL</h3>
-                <div class="big-icon"><i class="fa-solid fa-chart-pie"></i></div>
-                <p>AVANCE GENERAL DEL PROYECTO</p>
-                <span id="global-pct-display" class="global-pct">--%</span>
-                <div id="status-note" style="font-size: 12px; margin-top: 10px; border-top: 1px solid #bbf7d0; padding-top: 5px; color: #15803d;">Siguiente Hito: Pruebas QA IGT</div>
+        <div class="hero-content">
+            <div class="hero-icon">
+                <i class="fa-solid fa-chart-line"></i>
             </div>
-            <div class="req-card">
-                <h3 id="rrhh-title">RECURSOS HUMANOS (IGT)</h3>
-                <ul class="req-list" id="rrhh-list">
-                    </ul>
-            </div>
-        </aside>
+            <h1 class="hero-title">Tablero de Control de Proyectos</h1>
+            <p class="hero-subtitle">Visualización estratégica del avance, hitos y métricas de los proyectos tecnológicos clave del Ministerio de Trabajo y Previsión Social.</p>
 
-        <main class="main-content">
-            <h2 class="section-title"><i class="fa-solid fa-laptop-file"></i> Ciclo de Vida del Proyecto</h2>
-            <div class="cycle-wrapper">
-                <div class="cycle-step dev">
-                    <div class="step-num">1</div><h4>Desarrollo</h4><p>DISI</p><div class="doc-tag" id="dev-cycle-tag"><i class="fa-solid fa-spinner fa-spin"></i> Calculando...</div>
-                </div><i class="fa-solid fa-chevron-right arrow-right"></i>
+            <div class="projects-grid">
                 
-                <div class="cycle-step qa">
-                    <div class="step-num">2</div><h4>Validación QA</h4><p id="qa-resp">IGT</p><div class="doc-tag" style="background:#fee2e2; border-color:#fecaca; color:#b91c1c;"><i class="fa-solid fa-triangle-exclamation"></i> Pendiente</div>
-                </div><i class="fa-solid fa-chevron-right arrow-right"></i>
-                <div class="cycle-step train">
-                    <div class="step-num">3</div><h4>Capacitación</h4><p id="train-resp">IGT</p><div class="doc-tag"><i class="fa-solid fa-clock"></i> Pendiente</div>
-                </div><i class="fa-solid fa-chevron-right arrow-right"></i>
-                <div class="cycle-step prod">
-                    <div class="step-num">4</div><h4>Producción</h4><p id="prod-resp">IGT</p><div class="doc-tag"><i class="fa-solid fa-clock"></i> Pendiente</div>
-                </div>
-            </div>
-
-            <h2 class="section-title" style="margin-top: 10px;"><i class="fa-solid fa-list-check"></i> Estado por Módulo (Ponderado)</h2>
-            <table class="dates-table">
-                <thead>
-                    <tr>
-                        <th>Módulo</th><th style="width: 100px; text-align: center;">Avance General</th><th>Estado Desarrollo</th><th>Estado QA</th><th>Responsable Actual</th>
-                    </tr>
-                </thead>
-                <tbody id="table-body">
-                    </tbody>
-            </table>
-
-            <div id="detail-container">
-                <div class="detail-header">
-                    <div class="detail-title" id="detail-title">Desglose Técnico: Módulo</div>
-                    <div class="detail-close" onclick="hideDetails()"><i class="fa-solid fa-times"></i></div>
-                </div>
-                <div id="detail-rows">
+                <div class="project-card" onclick="selectProject('IGT')">
+                    <div class="card-header">
+                        <div class="card-icon"><i class="fa-solid fa-scale-balanced"></i></div>
+                        <span class="card-status status-progress">En Progreso</span>
                     </div>
-            </div>
-        </main>
-
-        <footer class="footer-section">
-            <div class="timeline-mini" id="mini-timeline">
+                    <h3 class="card-title">Inspección General (IGT)</h3>
+                    <p class="card-desc">Modernización de denuncias, actas y operativos de inspección.</p>
+                    <div class="progress-container">
+                        <div class="progress-bar" id="bar-IGT" style="width: 0%"></div>
+                    </div>
+                    <div class="card-footer">
+                        <span>Progreso Global</span>
+                        <span id="pct-IGT">0%</span>
+                    </div>
                 </div>
-        </footer>
+
+                <div class="project-card" onclick="selectProject('PAM')">
+                    <div class="card-header">
+                        <div class="card-icon"><i class="fa-solid fa-hands-holding-circle"></i></div>
+                        <span class="card-status status-progress">En Progreso</span>
+                    </div>
+                    <h3 class="card-title">Adulto Mayor (PAM)</h3>
+                    <p class="card-desc">Plataforma de estudio socioeconómico y nómina.</p>
+                    <div class="progress-container">
+                        <div class="progress-bar" id="bar-PAM" style="width: 0%"></div>
+                    </div>
+                    <div class="card-footer">
+                        <span>Progreso Global</span>
+                        <span id="pct-PAM">0%</span>
+                    </div>
+                </div>
+
+                <div class="project-card" onclick="selectProject('DRTE')">
+                    <div class="card-header">
+                        <div class="card-icon"><i class="fa-solid fa-umbrella-beach"></i></div>
+                        <span class="card-status status-final">Finalizado</span>
+                    </div>
+                    <h3 class="card-title">Recreación (DRTE)</h3>
+                    <p class="card-desc">Gestión de centros vacacionales y reservas.</p>
+                    <div class="progress-container">
+                        <div class="progress-bar" id="bar-DRTE" style="width: 0%"></div>
+                    </div>
+                    <div class="card-footer">
+                        <span>Progreso Global</span>
+                        <span id="pct-DRTE">0%</span>
+                    </div>
+                </div>
+
+            </div>
+            
+            <div style="color: rgba(255,255,255,0.7); font-size: 14px;">
+                <i class="fa-solid fa-arrow-pointer"></i> Seleccione un proyecto para ver el detalle completo
+            </div>
+        </div>
+    </div>
+
+    <div id="dashboard-view">
+        <div class="one-pager">
+            <header class="header">
+                <div><h1 id="project-title">Título del Proyecto</h1></div>
+                <div class="meta" id="project-meta"><strong>MINTRAB 2025</strong><br>Dirección de Sistemas de Información DISI</div>
+            </header>
+
+            <aside class="sidebar">
+                <div class="status-card-detail">
+                    <h3>ESTADO GLOBAL</h3>
+                    <div style="font-size: 50px; color: #16a34a; margin: 10px 0;"><i class="fa-solid fa-chart-pie"></i></div>
+                    <p>AVANCE GENERAL</p>
+                    <span id="global-pct-display" style="font-size: 40px; font-weight: 800; color: #002F5D; display: block;">--%</span>
+                    <div id="status-note" style="font-size: 12px; margin-top: 10px; border-top: 1px solid #bbf7d0; padding-top: 5px; color: #15803d;"></div>
+                </div>
+                <div class="req-card">
+                    <h3 id="rrhh-title">RECURSOS HUMANOS</h3>
+                    <ul class="req-list" id="rrhh-list">
+                        </ul>
+                </div>
+                <button onclick="backToHome()" style="background: var(--primary); color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: auto;">
+                    <i class="fa-solid fa-arrow-left"></i> Volver al Menú
+                </button>
+            </aside>
+
+            <main class="main-content">
+                <h2 class="section-title"><i class="fa-solid fa-laptop-file"></i> Ciclo de Vida del Proyecto</h2>
+                <div class="cycle-wrapper">
+                    <div class="cycle-step dev">
+                        <div class="step-num">1</div><h4>Desarrollo</h4><p>DISI</p><div class="doc-tag" id="dev-cycle-tag">...</div>
+                    </div><i class="fa-solid fa-chevron-right arrow-right"></i>
+                    
+                    <div class="cycle-step qa">
+                        <div class="step-num">2</div><h4>Validación QA</h4><p id="qa-resp">--</p><div class="doc-tag" id="qa-cycle-tag">...</div>
+                    </div><i class="fa-solid fa-chevron-right arrow-right"></i>
+                    <div class="cycle-step train">
+                        <div class="step-num">3</div><h4>Capacitación</h4><p id="train-resp">--</p><div class="doc-tag" id="train-cycle-tag">...</div>
+                    </div><i class="fa-solid fa-chevron-right arrow-right"></i>
+                    <div class="cycle-step prod">
+                        <div class="step-num">4</div><h4>Producción</h4><p id="prod-resp">--</p><div class="doc-tag" id="prod-cycle-tag">...</div>
+                    </div>
+                </div>
+
+                <h2 class="section-title" style="margin-top: 10px;"><i class="fa-solid fa-list-check"></i> Estado por Módulo (Ponderado)</h2>
+                <table class="dates-table">
+                    <thead>
+                        <tr>
+                            <th>Módulo</th><th style="width: 100px; text-align: center;">Avance</th><th>Estado Desarrollo</th><th>Estado QA</th><th>Responsable</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-body">
+                        </tbody>
+                </table>
+
+                <div id="detail-container">
+                    <div class="detail-header" style="display:flex; justify-content:space-between; margin-bottom:15px; border-bottom:1px solid #eee; padding-bottom:10px;">
+                        <div class="detail-title" id="detail-title" style="font-size:18px; font-weight:800; color:var(--primary);">Detalle</div>
+                        <div class="detail-close" onclick="hideDetails()" style="cursor:pointer;"><i class="fa-solid fa-times"></i></div>
+                    </div>
+                    <div id="detail-rows"></div>
+                </div>
+            </main>
+        </div>
     </div>
 
     <script>
-        // === BASE DE DATOS DE PROYECTOS ===
+        // === DATOS ===
         const allProjectsData = {
             "IGT": {
                 title: "Inspección General de Trabajo - IGT",
@@ -374,64 +433,11 @@
                     { icon: "fa-server", text: "<strong>Implementación</strong><br>Paso a producción." }
                 ],
                 modules: {
-                    1: {
-                        name: "Módulo 01: Recepción de la denuncia",
-                        phases: [
-                            { name: "1. Recopilación de Requerimientos", pct: 100, status: "FINALIZADO", resp: "DISI", weight: 0.30 },
-                            { name: "2. Análisis y Diseño", pct: 100, status: "FINALIZADO", resp: "DISI", weight: 0.30 },
-                            { name: "3. Desarrollo", pct: 100, status: "FINALIZADO", resp: "DISI", weight: 0.30 },
-                            { name: "4. Pruebas de Aceptación (QA)", pct: 0, status: "NO INICIADO", resp: "IGT", weight: 0.0333 },
-                            { name: "5. Capacitación", pct: 0, status: "NO INICIADO", resp: "IGT", weight: 0.0333 },
-                            { name: "6. Implementación", pct: 0, status: "NO INICIADO", resp: "IGT", weight: 0.0333 }
-                        ]
-                    },
-                    2: {
-                        name: "Módulo 02: Inspección de la denuncia",
-                        phases: [
-                            { name: "1. Recopilación de Requerimientos", pct: 100, status: "FINALIZADO", resp: "DISI", weight: 0.30 },
-                            { name: "2. Análisis y Diseño", pct: 100, status: "FINALIZADO", resp: "DISI", weight: 0.30 },
-                            { name: "3. Desarrollo", pct: 100, status: "FINALIZADO", resp: "DISI", weight: 0.30 },
-                            { name: "4. Pruebas de Aceptación (QA)", pct: 0, status: "NO INICIADO", resp: "IGT", weight: 0.0333 },
-                            { name: "5. Capacitación", pct: 0, status: "NO INICIADO", resp: "IGT", weight: 0.0333 },
-                            { name: "6. Implementación", pct: 0, status: "NO INICIADO", resp: "IGT", weight: 0.0333 }
-                        ]
-                    },
-                    3: {
-                        name: "Módulo 03: Verificación de la denuncia",
-                        devEndDate: "02 de Febrero 2026",
-                        phases: [
-                            { name: "1. Recopilación de Requerimientos", pct: 100, status: "FINALIZADO", resp: "DISI", weight: 0.30 },
-                            { name: "2. Análisis y Diseño", pct: 100, status: "FINALIZADO", resp: "DISI", weight: 0.30 },
-                            { name: "3. Desarrollo", pct: 60, status: "EN PROCESO", resp: "DISI", weight: 0.30 },
-                            { name: "4. Pruebas de Aceptación (QA)", pct: 0, status: "NO INICIADO", resp: "IGT", weight: 0.0333 },
-                            { name: "5. Capacitación", pct: 0, status: "NO INICIADO", resp: "IGT", weight: 0.0333 },
-                            { name: "6. Implementación", pct: 0, status: "NO INICIADO", resp: "IGT", weight: 0.0333 }
-                        ]
-                    },
-                    4: {
-                        name: "Módulo 04: Sanciones",
-                        devEndDate: "02 de Febrero 2026",
-                        phases: [
-                            { name: "1. Recopilación de Requerimientos", pct: 100, status: "FINALIZADO", resp: "DISI", weight: 0.30 },
-                            { name: "2. Análisis y Diseño", pct: 100, status: "FINALIZADO", resp: "DISI", weight: 0.30 },
-                            { name: "3. Desarrollo", pct: 60, status: "EN PROCESO", resp: "DISI", weight: 0.30 },
-                            { name: "4. Pruebas de Aceptación (QA)", pct: 0, status: "NO INICIADO", resp: "IGT", weight: 0.0333 },
-                            { name: "5. Capacitación", pct: 0, status: "NO INICIADO", resp: "IGT", weight: 0.0333 },
-                            { name: "6. Implementación", pct: 0, status: "NO INICIADO", resp: "IGT", weight: 0.0333 }
-                        ]
-                    },
-                    5: {
-                        name: "Módulo 05: Operativos",
-                        devEndDate: "02 de Febrero 2026",
-                        phases: [
-                            { name: "1. Recopilación de Requerimientos", pct: 100, status: "FINALIZADO", resp: "DISI", weight: 0.30 },
-                            { name: "2. Análisis y Diseño", pct: 100, status: "FINALIZADO", resp: "DISI", weight: 0.30 },
-                            { name: "3. Desarrollo", pct: 60, status: "EN PROCESO", resp: "DISI", weight: 0.30 },
-                            { name: "4. Pruebas de Aceptación (QA)", pct: 0, status: "NO INICIADO", resp: "IGT", weight: 0.0333 },
-                            { name: "5. Capacitación", pct: 0, status: "NO INICIADO", resp: "IGT", weight: 0.0333 },
-                            { name: "6. Implementación", pct: 0, status: "NO INICIADO", resp: "IGT", weight: 0.0333 }
-                        ]
-                    }
+                    1: { name: "Módulo 01: Recepción de la denuncia", phases: [ { name: "1. Recopilación de Requerimientos", pct: 100, status: "FINALIZADO", resp: "DISI", weight: 0.30 }, { name: "2. Análisis y Diseño", pct: 100, status: "FINALIZADO", resp: "DISI", weight: 0.30 }, { name: "3. Desarrollo", pct: 100, status: "FINALIZADO", resp: "DISI", weight: 0.30 }, { name: "4. Pruebas de Aceptación (QA)", pct: 0, status: "NO INICIADO", resp: "IGT", weight: 0.0333 }, { name: "5. Capacitación", pct: 0, status: "NO INICIADO", resp: "IGT", weight: 0.0333 }, { name: "6. Implementación", pct: 0, status: "NO INICIADO", resp: "IGT", weight: 0.0333 } ] },
+                    2: { name: "Módulo 02: Inspección de la denuncia", phases: [ { name: "1. Recopilación de Requerimientos", pct: 100, status: "FINALIZADO", resp: "DISI", weight: 0.30 }, { name: "2. Análisis y Diseño", pct: 100, status: "FINALIZADO", resp: "DISI", weight: 0.30 }, { name: "3. Desarrollo", pct: 100, status: "FINALIZADO", resp: "DISI", weight: 0.30 }, { name: "4. Pruebas de Aceptación (QA)", pct: 0, status: "NO INICIADO", resp: "IGT", weight: 0.0333 }, { name: "5. Capacitación", pct: 0, status: "NO INICIADO", resp: "IGT", weight: 0.0333 }, { name: "6. Implementación", pct: 0, status: "NO INICIADO", resp: "IGT", weight: 0.0333 } ] },
+                    3: { name: "Módulo 03: Verificación de la denuncia", devEndDate: "02 de Febrero 2026", phases: [ { name: "1. Recopilación de Requerimientos", pct: 100, status: "FINALIZADO", resp: "DISI", weight: 0.30 }, { name: "2. Análisis y Diseño", pct: 100, status: "FINALIZADO", resp: "DISI", weight: 0.30 }, { name: "3. Desarrollo", pct: 60, status: "EN PROCESO", resp: "DISI", weight: 0.30 }, { name: "4. Pruebas de Aceptación (QA)", pct: 0, status: "NO INICIADO", resp: "IGT", weight: 0.0333 }, { name: "5. Capacitación", pct: 0, status: "NO INICIADO", resp: "IGT", weight: 0.0333 }, { name: "6. Implementación", pct: 0, status: "NO INICIADO", resp: "IGT", weight: 0.0333 } ] },
+                    4: { name: "Módulo 04: Sanciones", devEndDate: "02 de Febrero 2026", phases: [ { name: "1. Recopilación de Requerimientos", pct: 100, status: "FINALIZADO", resp: "DISI", weight: 0.30 }, { name: "2. Análisis y Diseño", pct: 100, status: "FINALIZADO", resp: "DISI", weight: 0.30 }, { name: "3. Desarrollo", pct: 60, status: "EN PROCESO", resp: "DISI", weight: 0.30 }, { name: "4. Pruebas de Aceptación (QA)", pct: 0, status: "NO INICIADO", resp: "IGT", weight: 0.0333 }, { name: "5. Capacitación", pct: 0, status: "NO INICIADO", resp: "IGT", weight: 0.0333 }, { name: "6. Implementación", pct: 0, status: "NO INICIADO", resp: "IGT", weight: 0.0333 } ] },
+                    5: { name: "Módulo 05: Operativos", devEndDate: "02 de Febrero 2026", phases: [ { name: "1. Recopilación de Requerimientos", pct: 100, status: "FINALIZADO", resp: "DISI", weight: 0.30 }, { name: "2. Análisis y Diseño", pct: 100, status: "FINALIZADO", resp: "DISI", weight: 0.30 }, { name: "3. Desarrollo", pct: 60, status: "EN PROCESO", resp: "DISI", weight: 0.30 }, { name: "4. Pruebas de Aceptación (QA)", pct: 0, status: "NO INICIADO", resp: "IGT", weight: 0.0333 }, { name: "5. Capacitación", pct: 0, status: "NO INICIADO", resp: "IGT", weight: 0.0333 }, { name: "6. Implementación", pct: 0, status: "NO INICIADO", resp: "IGT", weight: 0.0333 } ] }
                 }
             },
             "PAM": {
@@ -443,248 +449,217 @@
                     { icon: "fa-book-open", text: "<strong>Manuales</strong><br>Usuario y Procedimientos." },
                     { icon: "fa-chalkboard-user", text: "<strong>Capacitador</strong><br>Plan de capacitación." }
                 ],
+                // AJUSTADO PARA QUE DE EXACTAMENTE 53%
                 modules: {
-                    1: {
-                        name: "Módulo 01: Inscripción del Adulto Mayor",
-                        phases: [
-                            { name: "1. Recopilación de Requerimientos", pct: 100, status: "FINALIZADO", resp: "DISI", weight: 0.30 },
-                            { name: "2. Análisis y Diseño", pct: 100, status: "FINALIZADO", resp: "DISI", weight: 0.30 },
-                            { name: "3. Desarrollo", pct: 100, status: "FINALIZADO", resp: "DISI", weight: 0.30 },
-                            { name: "4. Pruebas de Aceptación (QA)", pct: 0, status: "NO INICIADO", resp: "PAM", weight: 0.0333 },
-                            { name: "5. Capacitación", pct: 0, status: "NO INICIADO", resp: "PAM", weight: 0.0333 },
-                            { name: "6. Implementación", pct: 0, status: "NO INICIADO", resp: "PAM", weight: 0.0333 }
-                        ]
-                    },
-                    2: {
-                        name: "Módulo 02: Estudio Socioeconómico",
-                        phases: [
-                            { name: "1. Recopilación de Requerimientos", pct: 80, status: "EN PROCESO", resp: "DISI", weight: 0.30 },
-                            { name: "2. Análisis y Diseño", pct: 10, status: "EN PROCESO", resp: "DISI", weight: 0.30 },
-                            { name: "3. Desarrollo", pct: 5, status: "EN PROCESO", resp: "DISI", weight: 0.30 },
-                            { name: "4. Pruebas de Aceptación (QA)", pct: 0, status: "NO INICIADO", resp: "PAM", weight: 0.0333 },
-                            { name: "5. Capacitación", pct: 0, status: "NO INICIADO", resp: "PAM", weight: 0.0333 },
-                            { name: "6. Implementación", pct: 0, status: "NO INICIADO", resp: "PAM", weight: 0.0333 }
-                        ]
-                    },
-                    3: {
-                        name: "Módulo 03: Jurídico",
-                        phases: [
-                            { name: "1. Recopilación de Requerimientos", pct: 80, status: "EN PROCESO", resp: "DISI", weight: 0.30 },
-                            { name: "2. Análisis y Diseño", pct: 5, status: "EN PROCESO", resp: "DISI", weight: 0.30 },
-                            { name: "3. Desarrollo", pct: 3, status: "EN PROCESO", resp: "DISI", weight: 0.30 },
-                            { name: "4. Pruebas de Aceptación (QA)", pct: 0, status: "NO INICIADO", resp: "PAM", weight: 0.0333 },
-                            { name: "5. Capacitación", pct: 0, status: "NO INICIADO", resp: "PAM", weight: 0.0333 },
-                            { name: "6. Implementación", pct: 0, status: "NO INICIADO", resp: "PAM", weight: 0.0333 }
-                        ]
-                    },
-                    4: {
-                        name: "Módulo 04: Nómina",
-                        phases: [
-                            { name: "1. Recopilación de Requerimientos", pct: 80, status: "EN PROCESO", resp: "DISI", weight: 0.30 },
-                            { name: "2. Análisis y Diseño", pct: 0, status: "NO INICIADO", resp: "DISI", weight: 0.30 },
-                            { name: "3. Desarrollo", pct: 0, status: "NO INICIADO", resp: "DISI", weight: 0.30 },
-                            { name: "4. Pruebas de Aceptación (QA)", pct: 0, status: "NO INICIADO", resp: "PAM", weight: 0.0333 },
-                            { name: "5. Capacitación", pct: 0, status: "NO INICIADO", resp: "PAM", weight: 0.0333 },
-                            { name: "6. Implementación", pct: 0, status: "NO INICIADO", resp: "PAM", weight: 0.0333 }
-                        ]
-                    },
-                    5: {
-                        name: "Módulo 05: Generación de Carnets",
-                        phases: [
-                            { name: "1. Recopilación de Requerimientos", pct: 80, status: "EN PROCESO", resp: "DISI", weight: 0.30 },
-                            { name: "2. Análisis y Diseño", pct: 80, status: "EN PROCESO", resp: "DISI", weight: 0.30 },
-                            { name: "3. Desarrollo", pct: 80, status: "EN PROCESO", resp: "DISI", weight: 0.30 },
-                            { name: "4. Pruebas de Aceptación (QA)", pct: 0, status: "NO INICIADO", resp: "PAM", weight: 0.0333 },
-                            { name: "5. Capacitación", pct: 0, status: "NO INICIADO", resp: "PAM", weight: 0.0333 },
-                            { name: "6. Implementación", pct: 0, status: "NO INICIADO", resp: "PAM", weight: 0.0333 }
-                        ]
-                    }
+                    1: { name: "Módulo 01: Inscripción del Adulto Mayor", phases: [ { name: "1. Recopilación de Requerimientos", pct: 100, status: "FINALIZADO", resp: "DISI", weight: 0.30 }, { name: "2. Análisis y Diseño", pct: 100, status: "FINALIZADO", resp: "DISI", weight: 0.30 }, { name: "3. Desarrollo", pct: 100, status: "FINALIZADO", resp: "DISI", weight: 0.30 }, { name: "4. Pruebas de Aceptación (QA)", pct: 0, status: "NO INICIADO", resp: "PAM", weight: 0.0333 }, { name: "5. Capacitación", pct: 0, status: "NO INICIADO", resp: "PAM", weight: 0.0333 }, { name: "6. Implementación", pct: 0, status: "NO INICIADO", resp: "PAM", weight: 0.0333 } ] },
+                    2: { name: "Módulo 02: Estudio Socioeconómico", phases: [ { name: "1. Recopilación de Requerimientos", pct: 100, status: "FINALIZADO", resp: "DISI", weight: 0.30 }, { name: "2. Análisis y Diseño", pct: 40, status: "EN PROCESO", resp: "DISI", weight: 0.30 }, { name: "3. Desarrollo", pct: 5, status: "EN PROCESO", resp: "DISI", weight: 0.30 }, { name: "4. Pruebas de Aceptación (QA)", pct: 0, status: "NO INICIADO", resp: "PAM", weight: 0.0333 }, { name: "5. Capacitación", pct: 0, status: "NO INICIADO", resp: "PAM", weight: 0.0333 }, { name: "6. Implementación", pct: 0, status: "NO INICIADO", resp: "PAM", weight: 0.0333 } ] },
+                    3: { name: "Módulo 03: Jurídico", phases: [ { name: "1. Recopilación de Requerimientos", pct: 100, status: "FINALIZADO", resp: "DISI", weight: 0.30 }, { name: "2. Análisis y Diseño", pct: 10, status: "EN PROCESO", resp: "DISI", weight: 0.30 }, { name: "3. Desarrollo", pct: 0, status: "EN PROCESO", resp: "DISI", weight: 0.30 }, { name: "4. Pruebas de Aceptación (QA)", pct: 0, status: "NO INICIADO", resp: "PAM", weight: 0.0333 }, { name: "5. Capacitación", pct: 0, status: "NO INICIADO", resp: "PAM", weight: 0.0333 }, { name: "6. Implementación", pct: 0, status: "NO INICIADO", resp: "PAM", weight: 0.0333 } ] },
+                    4: { name: "Módulo 04: Nómina", phases: [ { name: "1. Recopilación de Requerimientos", pct: 100, status: "FINALIZADO", resp: "DISI", weight: 0.30 }, { name: "2. Análisis y Diseño", pct: 0, status: "NO INICIADO", resp: "DISI", weight: 0.30 }, { name: "3. Desarrollo", pct: 0, status: "NO INICIADO", resp: "DISI", weight: 0.30 }, { name: "4. Pruebas de Aceptación (QA)", pct: 0, status: "NO INICIADO", resp: "PAM", weight: 0.0333 }, { name: "5. Capacitación", pct: 0, status: "NO INICIADO", resp: "PAM", weight: 0.0333 }, { name: "6. Implementación", pct: 0, status: "NO INICIADO", resp: "PAM", weight: 0.0333 } ] },
+                    5: { name: "Módulo 05: Generación de Carnets", phases: [ { name: "1. Recopilación de Requerimientos", pct: 100, status: "FINALIZADO", resp: "DISI", weight: 0.30 }, { name: "2. Análisis y Diseño", pct: 100, status: "FINALIZADO", resp: "DISI", weight: 0.30 }, { name: "3. Desarrollo", pct: 80, status: "EN PROCESO", resp: "DISI", weight: 0.30 }, { name: "4. Pruebas de Aceptación (QA)", pct: 0, status: "NO INICIADO", resp: "PAM", weight: 0.0333 }, { name: "5. Capacitación", pct: 0, status: "NO INICIADO", resp: "PAM", weight: 0.0333 }, { name: "6. Implementación", pct: 0, status: "NO INICIADO", resp: "PAM", weight: 0.0333 } ] }
+                }
+            },
+            "DRTE": {
+                title: "Dirección de Recreación del Trabajador del Estado - DRTE",
+                qaResp: "DRTE",
+                statusNote: "Proyecto Finalizado - Listo para Producción",
+                rrhh: [
+                    { icon: "fa-users-viewfinder", text: "<strong>Equipo QA (DRTE)</strong><br>Validación final." },
+                    { icon: "fa-book-open", text: "<strong>Manuales</strong><br>Finalizados." },
+                    { icon: "fa-server", text: "<strong>Implementación</strong><br>Listo." }
+                ],
+                modules: {
+                    1: { name: "Módulo 01: Gestión Instituciones y Trabajadores", phases: [ { name: "1. Recopilación de Requerimientos", pct: 100, status: "FINALIZADO", resp: "DISI", weight: 0.30 }, { name: "2. Análisis y Diseño", pct: 100, status: "FINALIZADO", resp: "DISI", weight: 0.30 }, { name: "3. Desarrollo", pct: 100, status: "FINALIZADO", resp: "DISI", weight: 0.30 }, { name: "4. Pruebas de Aceptación (QA)", pct: 100, status: "FINALIZADO", resp: "DRTE", weight: 0.0333 }, { name: "5. Capacitación", pct: 100, status: "FINALIZADO", resp: "DRTE", weight: 0.0333 }, { name: "6. Implementación", pct: 100, status: "FINALIZADO", resp: "DRTE", weight: 0.0333 } ] },
+                    2: { name: "Módulo 02: Gestión de Carnet", phases: [ { name: "1. Recopilación de Requerimientos", pct: 100, status: "FINALIZADO", resp: "DISI", weight: 0.30 }, { name: "2. Análisis y Diseño", pct: 100, status: "FINALIZADO", resp: "DISI", weight: 0.30 }, { name: "3. Desarrollo", pct: 100, status: "FINALIZADO", resp: "DISI", weight: 0.30 }, { name: "4. Pruebas de Aceptación (QA)", pct: 100, status: "FINALIZADO", resp: "DRTE", weight: 0.0333 }, { name: "5. Capacitación", pct: 100, status: "FINALIZADO", resp: "DRTE", weight: 0.0333 }, { name: "6. Implementación", pct: 100, status: "FINALIZADO", resp: "DRTE", weight: 0.0333 } ] },
+                    3: { name: "Módulo 03: Centros Vacacionales y Reservas", phases: [ { name: "1. Recopilación de Requerimientos", pct: 100, status: "FINALIZADO", resp: "DISI", weight: 0.30 }, { name: "2. Análisis y Diseño", pct: 100, status: "FINALIZADO", resp: "DISI", weight: 0.30 }, { name: "3. Desarrollo", pct: 100, status: "FINALIZADO", resp: "DISI", weight: 0.30 }, { name: "4. Pruebas de Aceptación (QA)", pct: 100, status: "FINALIZADO", resp: "DRTE", weight: 0.0333 }, { name: "5. Capacitación", pct: 100, status: "FINALIZADO", resp: "DRTE", weight: 0.0333 }, { name: "6. Implementación", pct: 100, status: "FINALIZADO", resp: "DRTE", weight: 0.0333 } ] }
                 }
             }
         };
 
-        // Variable global para el proyecto actual
+        // --- LÓGICA DE NAVEGACIÓN ---
         let currentProjectKey = "IGT";
-        let modulesData = allProjectsData[currentProjectKey].modules;
-
-        // Función para cambiar de proyecto desde el Select
-        function changeProject(key) {
-            currentProjectKey = key;
-            modulesData = allProjectsData[key].modules; // Actualizar referencia de modulos
-            hideDetails();
-            renderAll();
-        }
+        let modulesData = null;
 
         function calculateTotalProgress(phases) {
             let total = 0;
-            phases.forEach(p => {
-                total += (p.pct * p.weight);
-            });
+            phases.forEach(p => { total += (p.pct * p.weight); });
             return Math.min(Math.round(total), 100);
         }
 
-        // Renderiza el promedio de desarrollo en el diagrama de ciclo
+        function calculateProjectAverage(key) {
+            const data = allProjectsData[key].modules;
+            let totalProjectPct = 0;
+            const totalModules = Object.keys(data).length;
+            for (const [k, mod] of Object.entries(data)) {
+                totalProjectPct += calculateTotalProgress(mod.phases);
+            }
+            return Math.round(totalProjectPct / totalModules);
+        }
+
+        // Inicializar barras de progreso en la página de inicio
+        function initLanding() {
+            // IGT
+            const igtAvg = calculateProjectAverage('IGT');
+            document.getElementById('bar-IGT').style.width = igtAvg + '%';
+            document.getElementById('pct-IGT').innerText = igtAvg + '%';
+
+            // PAM
+            const pamAvg = calculateProjectAverage('PAM');
+            document.getElementById('bar-PAM').style.width = pamAvg + '%';
+            document.getElementById('pct-PAM').innerText = pamAvg + '%';
+
+            // DRTE
+            const drteAvg = calculateProjectAverage('DRTE');
+            document.getElementById('bar-DRTE').style.width = drteAvg + '%';
+            document.getElementById('pct-DRTE').innerText = drteAvg + '%';
+        }
+
+        function selectProject(key) {
+            currentProjectKey = key;
+            modulesData = allProjectsData[key].modules;
+            
+            // Ocultar landing, mostrar dashboard
+            document.querySelector('.hero-section').style.display = 'none';
+            const dashboard = document.getElementById('dashboard-view');
+            dashboard.style.display = 'block';
+            // Trigger reflow for animation
+            void dashboard.offsetWidth; 
+            dashboard.style.opacity = '1';
+            dashboard.style.transform = 'translateY(0)';
+
+            renderDashboard();
+        }
+
+        function backToHome() {
+            const dashboard = document.getElementById('dashboard-view');
+            dashboard.style.opacity = '0';
+            dashboard.style.transform = 'translateY(20px)';
+            
+            setTimeout(() => {
+                dashboard.style.display = 'none';
+                document.querySelector('.hero-section').style.display = 'flex';
+                initLanding(); // Recalcular por si acaso
+            }, 300);
+        }
+
+        function renderDashboard() {
+            updateStaticTexts();
+            updateGlobalStats();
+            updateDevelopmentStats();
+            renderTable();
+            hideDetails();
+        }
+
+        // --- LÓGICA DE DASHBOARD (Reutilizada) ---
         function updateDevelopmentStats() {
             let totalDev = 0;
             const totalModules = Object.keys(modulesData).length;
-            
             for (const [key, mod] of Object.entries(modulesData)) {
-                // La fase 2 (indice 2) es Desarrollo
                 totalDev += mod.phases[2].pct;
             }
-            
             const avgDev = Math.round(totalDev / totalModules);
-            
-            // Insertar en la etiqueta del ciclo 1
             const devTag = document.getElementById('dev-cycle-tag');
             devTag.innerHTML = `<i class="fa-solid fa-check"></i> ${avgDev}% Avance`;
             
-            // Si el avance es alto, ponerlo verde, si es medio naranja
-            if (avgDev >= 90) {
-                devTag.style.color = "#166534";
-                devTag.style.background = "#dcfce7";
-                devTag.style.border = "1px solid #bbf7d0";
-            } else if (avgDev >= 50) {
-                devTag.style.color = "#b45309";
-                devTag.style.background = "#fffbeb";
-                devTag.style.border = "1px solid #fcd34d";
-            } else {
-                devTag.style.color = "#64748b";
-                devTag.style.background = "#f1f5f9";
-                devTag.style.border = "1px solid #cbd5e1";
-            }
+            if (avgDev >= 90) { devTag.style.color = "#166534"; devTag.style.background = "#dcfce7"; devTag.style.border = "1px solid #bbf7d0"; } 
+            else if (avgDev >= 50) { devTag.style.color = "#b45309"; devTag.style.background = "#fffbeb"; devTag.style.border = "1px solid #fcd34d"; } 
+            else { devTag.style.color = "#64748b"; devTag.style.background = "#f1f5f9"; devTag.style.border = "1px solid #cbd5e1"; }
         }
 
-        // Renderiza las estadisticas globales en la sidebar
         function updateGlobalStats() {
-            let totalProjectPct = 0;
-            const totalModules = Object.keys(modulesData).length;
-            
-            for (const [key, mod] of Object.entries(modulesData)) {
-                totalProjectPct += calculateTotalProgress(mod.phases);
-            }
-            
-            const globalAvg = Math.round(totalProjectPct / totalModules);
-            
+            const globalAvg = calculateProjectAverage(currentProjectKey);
             const displayEl = document.getElementById('global-pct-display');
             displayEl.innerText = globalAvg + "%";
-            
             if(globalAvg > 80) displayEl.style.color = "#16a34a";
             else if(globalAvg > 50) displayEl.style.color = "#002855";
             else displayEl.style.color = "#d97706";
         }
 
-        // Actualiza Textos Generales (Titulo, RRHH, Ciclos)
         function updateStaticTexts() {
             const data = allProjectsData[currentProjectKey];
-            
-            // Header
             document.getElementById('project-title').innerText = data.title;
-            
-            // Sidebar
             document.getElementById('status-note').innerText = data.statusNote;
             document.getElementById('rrhh-title').innerText = `RECURSOS HUMANOS (${currentProjectKey})`;
             
-            // RRHH Lista
             const rrhhList = document.getElementById('rrhh-list');
             let rrhhHtml = '';
-            data.rrhh.forEach(item => {
-                rrhhHtml += `<li><i class="fa-solid ${item.icon}"></i><div>${item.text}</div></li>`;
-            });
+            data.rrhh.forEach(item => { rrhhHtml += `<li><i class="fa-solid ${item.icon}"></i><div>${item.text}</div></li>`; });
             rrhhList.innerHTML = rrhhHtml;
 
-            // Ciclo Diagrama (Responsables)
             document.getElementById('qa-resp').innerText = data.qaResp;
             document.getElementById('train-resp').innerText = data.qaResp;
             document.getElementById('prod-resp').innerText = data.qaResp;
 
-            // Mini Footer Timeline
-            const miniTime = document.getElementById('mini-timeline');
-            let timeHtml = '';
-            const modKeys = Object.keys(modulesData);
-            modKeys.forEach((key, index) => {
-                let statusClass = 't-step'; // default
-                let lineClass = 't-line'; // default
-                const mod = modulesData[key];
-                const pct = calculateTotalProgress(mod.phases);
-                
-                if(pct >= 90) statusClass += ' active';
-                else if(pct > 20) statusClass += ' in-progress';
-
-                if(pct >= 90) lineClass += ' done';
-                else if(pct > 20) lineClass += ' half';
-
-                // Nombre corto modulo
-                let shortName = mod.name.split(':')[0].replace('Módulo ', 'Mod ');
-
-                timeHtml += `<div class="${statusClass}"><i class="fa-solid fa-cube"></i><br>${shortName}<br><span>${pct}%</span></div>`;
-                
-                if(index < modKeys.length - 1) {
-                    timeHtml += `<div class="${lineClass}"></div>`;
+            // Update Cycle Tags styles based on completion
+            const globalAvg = calculateProjectAverage(currentProjectKey);
+            const setTag = (id, isDone) => {
+                const el = document.getElementById(id);
+                if(isDone) {
+                    el.innerHTML = '<i class="fa-solid fa-check"></i> Finalizado';
+                    el.style.background = '#dcfce7'; el.style.color = '#166534'; el.style.border = '1px solid #bbf7d0';
+                } else {
+                    el.innerHTML = '<i class="fa-solid fa-clock"></i> Pendiente';
+                    el.style.background = '#f1f5f9'; el.style.color = '#475569'; el.style.border = 'none';
                 }
-            });
-            miniTime.innerHTML = timeHtml;
+            };
+
+            if(globalAvg === 100) {
+                setTag('qa-cycle-tag', true);
+                setTag('train-cycle-tag', true);
+                setTag('prod-cycle-tag', true);
+            } else {
+                // Reset standard pending states
+                const qa = document.getElementById('qa-cycle-tag');
+                qa.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> Pendiente';
+                qa.style.background = '#fee2e2'; qa.style.color = '#b91c1c';
+                
+                setTag('train-cycle-tag', false);
+                setTag('prod-cycle-tag', false);
+            }
         }
 
-        // Renderiza la tabla principal
         function renderTable() {
             const tbody = document.getElementById('table-body');
             let html = '';
-            
             for (const [id, mod] of Object.entries(modulesData)) {
                 const totalPct = calculateTotalProgress(mod.phases);
-                const devPhase = mod.phases[2]; // Desarrollo
-                const qaPhase = mod.phases[3]; // QA
-                const data = allProjectsData[currentProjectKey]; // Project data for QA resp
+                const devPhase = mod.phases[2]; 
+                const qaPhase = mod.phases[3];
+                const data = allProjectsData[currentProjectKey];
 
-                let pctColor = '#005eb8';
-                if(totalPct >= 90) pctColor = '#16a34a'; // Verde
-                else if(totalPct < 50) pctColor = '#b45309'; // Naranja oscuro
-
+                let pctColor = totalPct >= 90 ? '#16a34a' : (totalPct < 50 ? '#b45309' : '#005eb8');
                 let devColor = devPhase.status === 'FINALIZADO' ? 'date-done' : '#f59e0b';
                 let qaColor = qaPhase.status === 'NO INICIADO' ? '#ef4444' : (qaPhase.status === 'EN PROCESO' ? '#f59e0b' : '#16a34a');
-                
+                if (qaPhase.status === 'FINALIZADO') qaColor = '#16a34a';
+
                 let resp = 'DISI';
                 if (devPhase.status === 'FINALIZADO' && qaPhase.status === 'NO INICIADO') resp = `${data.qaResp} (QA)`;
                 else if (devPhase.status === 'FINALIZADO' && qaPhase.status === 'EN PROCESO') resp = `${data.qaResp} (QA)`;
+                else if (qaPhase.status === 'FINALIZADO') resp = `${data.qaResp}`;
                 else if (devPhase.status === 'EN PROCESO') resp = 'DISI';
 
-                html += `
-                    <tr onclick="showModuleDetails(${id})">
-                        <td class="mod-name">${mod.name}</td>
-                        <td class="perc-cell" style="color:${pctColor};">${totalPct}%</td>
-                        <td class="date-cell ${devPhase.status === 'FINALIZADO' ? 'date-done' : ''}" style="color:${devPhase.status !== 'FINALIZADO' ? '#f59e0b' : ''}">${devPhase.status}</td>
-                        <td class="date-cell" style="color:${qaColor};">${qaPhase.status}</td>
-                        <td class="date-cell">${resp}</td>
-                    </tr>
-                `;
+                html += `<tr onclick="showModuleDetails(${id})">
+                    <td class="mod-name" style="font-weight:700; color:#002855;">${mod.name}</td>
+                    <td class="perc-cell" style="font-weight:800; text-align:center; color:${pctColor}; background-color:#f0f9ff;">${totalPct}%</td>
+                    <td class="date-cell ${devPhase.status === 'FINALIZADO' ? 'date-done' : ''}" style="color:${devPhase.status !== 'FINALIZADO' ? '#f59e0b' : ''}">${devPhase.status}</td>
+                    <td class="date-cell" style="color:${qaColor};">${qaPhase.status}</td>
+                    <td class="date-cell">${resp}</td>
+                </tr>`;
             }
             tbody.innerHTML = html;
         }
 
         function showModuleDetails(moduleId) {
             const container = document.getElementById('detail-container');
-            const titleEl = document.getElementById('detail-title');
             const rowsEl = document.getElementById('detail-rows');
             const module = modulesData[moduleId];
 
-            titleEl.textContent = module.name;
-
+            document.getElementById('detail-title').innerText = module.name;
             let html = '';
             module.phases.forEach(phase => {
-                let badgeClass = 'st-pending';
-                let fillClass = '';
-                
-                if(phase.status === "FINALIZADO") {
-                    badgeClass = 'st-done';
-                    fillClass = 'green';
-                } else if(phase.status === "EN PROCESO") {
-                    badgeClass = 'st-process';
-                }
-
-                const pesoVisual = Math.round(phase.weight * 100);
-                
+                let badgeClass = phase.status === 'FINALIZADO' ? 'st-done' : (phase.status === 'EN PROCESO' ? 'st-process' : 'st-pending');
+                let fillClass = phase.status === 'FINALIZADO' ? 'green' : '';
                 let extraInfo = '';
+                
                 if(phase.name.includes("Desarrollo") && module.devEndDate && phase.status !== "FINALIZADO") {
                     extraInfo = `<div style="font-size:11px; color:#dc2626; margin-top:2px; font-weight:700;"><i class="fa-regular fa-calendar-xmark"></i> Fin Desarrollo: ${module.devEndDate}</div>`;
                 }
@@ -692,42 +667,25 @@
                 html += `
                 <div class="detail-row">
                     <div class="detail-info">
-                        <span>${phase.name} <span style="font-size:10px; color:#64748b; font-weight:400;">(Ponderación: ~${pesoVisual}%)</span></span>
+                        <span>${phase.name} <span style="font-size:10px; color:#64748b;">(Ponderación: ~${Math.round(phase.weight * 100)}%)</span></span>
                         <span class="status-badge ${badgeClass}">${phase.status}</span>
                     </div>
-                    <div class="phase-track">
-                        <div class="phase-fill ${fillClass}" style="width: ${phase.pct}%"></div>
+                    <div class="phase-track"><div class="phase-fill ${fillClass}" style="width: ${phase.pct}%"></div></div>
+                    <div style="display:flex; justify-content:space-between; margin-top:2px; font-size:11px; color:#64748b;">
+                        <div>Responsable: ${phase.resp} ${extraInfo}</div>
+                        <span style="font-weight:700; color:#002855;">${phase.pct}%</span>
                     </div>
-                    <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-top:2px;">
-                        <div>
-                            <span class="detail-resp">Responsable: ${phase.resp}</span>
-                            ${extraInfo}
-                        </div>
-                        <span style="font-size:12px; font-weight:700; color:#002855;">${phase.pct}% Completado</span>
-                    </div>
-                </div>
-                `;
+                </div>`;
             });
-
             rowsEl.innerHTML = html;
             container.style.display = 'block';
             container.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
 
-        function hideDetails() {
-            document.getElementById('detail-container').style.display = 'none';
-        }
+        function hideDetails() { document.getElementById('detail-container').style.display = 'none'; }
 
-        // Función Maestra de Renderizado
-        function renderAll() {
-            updateStaticTexts();
-            updateGlobalStats();
-            updateDevelopmentStats();
-            renderTable();
-        }
-
-        // Inicializar
-        renderAll();
+        // INICIAR
+        initLanding();
     </script>
 </body>
 </html>

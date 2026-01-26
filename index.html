@@ -119,11 +119,6 @@
             box-shadow: 0 20px 40px rgba(0,0,0,0.2);
         }
 
-        .project-card.active {
-            border-color: #38bdf8; /* Celeste brillante */
-            box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.3);
-        }
-
         .card-header {
             display: flex;
             justify-content: space-between;
@@ -222,7 +217,6 @@
             border-top: 10px solid var(--primary);
         }
 
-        /* REUTILIZACIÓN DE ESTILOS ANTERIORES PARA EL DASHBOARD */
         .header { grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #e2e8f0; padding-bottom: 20px; margin-bottom: 10px; }
         .header h1 { margin: 0; font-size: 32px; color: var(--primary); font-weight: 800; }
         .header .meta { text-align: right; font-size: 14px; color: #64748b; }
@@ -452,10 +446,26 @@
                 // AJUSTADO PARA QUE DE EXACTAMENTE 53%
                 modules: {
                     1: { name: "Módulo 01: Inscripción del Adulto Mayor", phases: [ { name: "1. Recopilación de Requerimientos", pct: 100, status: "FINALIZADO", resp: "DISI", weight: 0.30 }, { name: "2. Análisis y Diseño", pct: 100, status: "FINALIZADO", resp: "DISI", weight: 0.30 }, { name: "3. Desarrollo", pct: 100, status: "FINALIZADO", resp: "DISI", weight: 0.30 }, { name: "4. Pruebas de Aceptación (QA)", pct: 0, status: "NO INICIADO", resp: "PAM", weight: 0.0333 }, { name: "5. Capacitación", pct: 0, status: "NO INICIADO", resp: "PAM", weight: 0.0333 }, { name: "6. Implementación", pct: 0, status: "NO INICIADO", resp: "PAM", weight: 0.0333 } ] },
-                    2: { name: "Módulo 02: Estudio Socioeconómico", phases: [ { name: "1. Recopilación de Requerimientos", pct: 100, status: "FINALIZADO", resp: "DISI", weight: 0.30 }, { name: "2. Análisis y Diseño", pct: 40, status: "EN PROCESO", resp: "DISI", weight: 0.30 }, { name: "3. Desarrollo", pct: 5, status: "EN PROCESO", resp: "DISI", weight: 0.30 }, { name: "4. Pruebas de Aceptación (QA)", pct: 0, status: "NO INICIADO", resp: "PAM", weight: 0.0333 }, { name: "5. Capacitación", pct: 0, status: "NO INICIADO", resp: "PAM", weight: 0.0333 }, { name: "6. Implementación", pct: 0, status: "NO INICIADO", resp: "PAM", weight: 0.0333 } ] },
-                    3: { name: "Módulo 03: Jurídico", phases: [ { name: "1. Recopilación de Requerimientos", pct: 100, status: "FINALIZADO", resp: "DISI", weight: 0.30 }, { name: "2. Análisis y Diseño", pct: 10, status: "EN PROCESO", resp: "DISI", weight: 0.30 }, { name: "3. Desarrollo", pct: 0, status: "EN PROCESO", resp: "DISI", weight: 0.30 }, { name: "4. Pruebas de Aceptación (QA)", pct: 0, status: "NO INICIADO", resp: "PAM", weight: 0.0333 }, { name: "5. Capacitación", pct: 0, status: "NO INICIADO", resp: "PAM", weight: 0.0333 }, { name: "6. Implementación", pct: 0, status: "NO INICIADO", resp: "PAM", weight: 0.0333 } ] },
-                    4: { name: "Módulo 04: Nómina", phases: [ { name: "1. Recopilación de Requerimientos", pct: 100, status: "FINALIZADO", resp: "DISI", weight: 0.30 }, { name: "2. Análisis y Diseño", pct: 0, status: "NO INICIADO", resp: "DISI", weight: 0.30 }, { name: "3. Desarrollo", pct: 0, status: "NO INICIADO", resp: "DISI", weight: 0.30 }, { name: "4. Pruebas de Aceptación (QA)", pct: 0, status: "NO INICIADO", resp: "PAM", weight: 0.0333 }, { name: "5. Capacitación", pct: 0, status: "NO INICIADO", resp: "PAM", weight: 0.0333 }, { name: "6. Implementación", pct: 0, status: "NO INICIADO", resp: "PAM", weight: 0.0333 } ] },
-                    5: { name: "Módulo 05: Generación de Carnets", phases: [ { name: "1. Recopilación de Requerimientos", pct: 100, status: "FINALIZADO", resp: "DISI", weight: 0.30 }, { name: "2. Análisis y Diseño", pct: 100, status: "FINALIZADO", resp: "DISI", weight: 0.30 }, { name: "3. Desarrollo", pct: 80, status: "EN PROCESO", resp: "DISI", weight: 0.30 }, { name: "4. Pruebas de Aceptación (QA)", pct: 0, status: "NO INICIADO", resp: "PAM", weight: 0.0333 }, { name: "5. Capacitación", pct: 0, status: "NO INICIADO", resp: "PAM", weight: 0.0333 }, { name: "6. Implementación", pct: 0, status: "NO INICIADO", resp: "PAM", weight: 0.0333 } ] }
+                    2: { 
+                        name: "Módulo 02: Estudio Socioeconómico", 
+                        devEndDate: "10 de Marzo 2026",
+                        phases: [ { name: "1. Recopilación de Requerimientos", pct: 100, status: "FINALIZADO", resp: "DISI", weight: 0.30 }, { name: "2. Análisis y Diseño", pct: 40, status: "EN PROCESO", resp: "DISI", weight: 0.30 }, { name: "3. Desarrollo", pct: 5, status: "EN PROCESO", resp: "DISI", weight: 0.30 }, { name: "4. Pruebas de Aceptación (QA)", pct: 0, status: "NO INICIADO", resp: "PAM", weight: 0.0333 }, { name: "5. Capacitación", pct: 0, status: "NO INICIADO", resp: "PAM", weight: 0.0333 }, { name: "6. Implementación", pct: 0, status: "NO INICIADO", resp: "PAM", weight: 0.0333 } ] 
+                    },
+                    3: { 
+                        name: "Módulo 03: Jurídico",
+                        devEndDate: "10 de Marzo 2026", 
+                        phases: [ { name: "1. Recopilación de Requerimientos", pct: 100, status: "FINALIZADO", resp: "DISI", weight: 0.30 }, { name: "2. Análisis y Diseño", pct: 10, status: "EN PROCESO", resp: "DISI", weight: 0.30 }, { name: "3. Desarrollo", pct: 0, status: "EN PROCESO", resp: "DISI", weight: 0.30 }, { name: "4. Pruebas de Aceptación (QA)", pct: 0, status: "NO INICIADO", resp: "PAM", weight: 0.0333 }, { name: "5. Capacitación", pct: 0, status: "NO INICIADO", resp: "PAM", weight: 0.0333 }, { name: "6. Implementación", pct: 0, status: "NO INICIADO", resp: "PAM", weight: 0.0333 } ] 
+                    },
+                    4: { 
+                        name: "Módulo 04: Nómina", 
+                        devEndDate: "30 de Abril 2026",
+                        phases: [ { name: "1. Recopilación de Requerimientos", pct: 100, status: "FINALIZADO", resp: "DISI", weight: 0.30 }, { name: "2. Análisis y Diseño", pct: 0, status: "NO INICIADO", resp: "DISI", weight: 0.30 }, { name: "3. Desarrollo", pct: 0, status: "NO INICIADO", resp: "DISI", weight: 0.30 }, { name: "4. Pruebas de Aceptación (QA)", pct: 0, status: "NO INICIADO", resp: "PAM", weight: 0.0333 }, { name: "5. Capacitación", pct: 0, status: "NO INICIADO", resp: "PAM", weight: 0.0333 }, { name: "6. Implementación", pct: 0, status: "NO INICIADO", resp: "PAM", weight: 0.0333 } ] 
+                    },
+                    5: { 
+                        name: "Módulo 05: Generación de Carnets", 
+                        devEndDate: "30 de Abril 2026",
+                        phases: [ { name: "1. Recopilación de Requerimientos", pct: 100, status: "FINALIZADO", resp: "DISI", weight: 0.30 }, { name: "2. Análisis y Diseño", pct: 100, status: "FINALIZADO", resp: "DISI", weight: 0.30 }, { name: "3. Desarrollo", pct: 80, status: "EN PROCESO", resp: "DISI", weight: 0.30 }, { name: "4. Pruebas de Aceptación (QA)", pct: 0, status: "NO INICIADO", resp: "PAM", weight: 0.0333 }, { name: "5. Capacitación", pct: 0, status: "NO INICIADO", resp: "PAM", weight: 0.0333 }, { name: "6. Implementación", pct: 0, status: "NO INICIADO", resp: "PAM", weight: 0.0333 } ] 
+                    }
                 }
             },
             "DRTE": {

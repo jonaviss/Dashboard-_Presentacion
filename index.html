@@ -3,218 +3,342 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IGT | PROYECTO 02 - Fase II de Sistematización</title>
+    <title>Módulo de Generación de Carnets y Notificaciones - PAM</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
-        body { font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
-        .bg-igt-dark { background-color: #1e293b; }
-        .bg-igt-primary { background-color: #2563eb; }
-        .text-igt-primary { color: #2563eb; }
-        .border-igt-primary { border-color: #2563eb; }
-        .gradient-main { background: linear-gradient(135deg, #1e293b 0%, #334155 100%); }
-        .card-hover:hover { transform: translateY(-8px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .tab-active { background-color: #003366; color: white; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); }
+        .hidden { display: none; }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-900">
+<body class="bg-[#f8fafc] text-slate-900 pb-20">
 
-    <!-- Barra de Navegación -->
-    <nav class="bg-white border-b border-slate-200 py-4 px-6 sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto flex justify-between items-center">
+    <!-- Header Institucional -->
+    <header class="bg-white border-b sticky top-0 z-50 shadow-sm">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
             <div class="flex items-center gap-3">
-                <div class="w-10 h-10 bg-igt-dark rounded flex items-center justify-center text-white font-bold text-xl">02</div>
+                <div class="w-10 h-10 bg-[#003366] rounded-lg flex items-center justify-center text-white shadow-lg">
+                    <i data-lucide="clipboard-check"></i>
+                </div>
                 <div>
-                    <h1 class="text-sm font-bold leading-tight">MINISTERIO DE TRABAJO</h1>
-                    <p class="text-[10px] text-slate-500 uppercase tracking-widest font-semibold">Sistemas de Información - DISI</p>
+                    <h1 class="text-sm font-bold text-[#003366] leading-tight uppercase tracking-tight">Módulo de generación</h1>
+                    <p class="text-[10px] font-bold text-blue-700 uppercase tracking-widest italic">de carnets y notificaciones</p>
                 </div>
             </div>
-            <div class="hidden md:flex gap-8 text-sm font-semibold text-slate-600">
-                <a href="#vision" class="hover:text-igt-primary transition-colors">Visión</a>
-                <a href="#modulos" class="hover:text-igt-primary transition-colors">Módulos</a>
-                <a href="#analisis" class="text-igt-primary">Análisis de Requerimientos</a>
+            <div class="flex gap-2 p-1 bg-slate-100 rounded-xl">
+                <button id="btn-office" onclick="switchView('office')" class="px-5 py-2 rounded-lg text-[10px] font-black transition-all tab-active">
+                    PLANIFICACIÓN LOGÍSTICA EN OFICINA DE CARNETS
+                </button>
+                <button id="btn-field" onclick="switchView('field')" class="px-5 py-2 rounded-lg text-[10px] font-black transition-all text-slate-500 hover:text-slate-700">
+                    ENTREGA DE NOTIFICACIONES Y CARNETS
+                </button>
             </div>
-        </div>
-    </nav>
-
-    <!-- Hero Section: PROYECTO 02 -->
-    <header class="gradient-main text-white py-24 px-6 relative">
-        <div class="max-w-6xl mx-auto relative z-10">
-            <div class="mb-6 inline-flex items-center gap-2 bg-blue-500/20 border border-blue-400/30 px-4 py-1.5 rounded-full">
-                <span class="text-xs font-bold tracking-widest uppercase text-blue-300">Fase II de Sistematización</span>
-            </div>
-            <h1 class="text-5xl md:text-6xl font-extrabold mb-6 tracking-tight">
-                PROYECTO <span class="text-blue-400">02</span>
-            </h1>
-            <h2 class="text-2xl md:text-3xl font-light text-slate-200 mb-8 max-w-2xl">
-                Integración de Procesos Legales y Cobro Ejecutivo para la Inspección General de Trabajo.
-            </h2>
         </div>
     </header>
 
-    <!-- Contexto de Integración -->
-    <section id="vision" class="py-20 px-6">
-        <div class="max-w-7xl mx-auto">
-            <div class="grid md:grid-cols-2 gap-16 items-center">
-                <div>
-                    <h3 class="text-igt-primary font-bold uppercase tracking-widest text-sm mb-4">Base Tecnológica</h3>
-                    <h2 class="text-3xl font-extrabold text-igt-dark mb-6 leading-tight">
-                        Proyecto 01:<br>Gestión de la Denuncia
-                    </h2>
-                    <p class="text-slate-600 mb-8 leading-relaxed">
-                        El primer proyecto constituye la base operativa del sistema, encargándose del flujo administrativo desde el ingreso de la queja hasta la determinación de infracciones.
-                    </p>
-                    <div class="space-y-4">
-                        <div class="flex items-center gap-4">
-                            <div class="w-8 h-8 bg-slate-100 rounded-lg flex items-center justify-center text-igt-dark font-bold text-xs shadow-sm">01</div>
-                            <span class="text-sm font-semibold text-slate-700 uppercase tracking-wide">Recepción de la Denuncia</span>
+    <main class="max-w-6xl mx-auto mt-12 px-6">
+        
+        <!-- ESCENARIO 01: PLANIFICACIÓN LOGÍSTICA EN OFICINA -->
+        <div id="view-office" class="space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-700">
+            <div class="text-center max-w-2xl mx-auto mb-16">
+                <h2 class="text-4xl font-black text-slate-800 uppercase tracking-tight leading-none text-[#003366]">PLANIFICACIÓN LOGÍSTICA EN OFICINA DE CARNETS</h2>
+                <div class="h-1.5 w-24 bg-blue-600 mx-auto mt-4 rounded-full"></div>
+                <p class="text-slate-500 mt-6 leading-relaxed font-medium">
+                    Soporte visual del flujo de trabajo administrativo previo a las giras de campo departamentales.
+                </p>
+            </div>
+
+            <!-- ANÁLISIS GEOGRÁFICO DE DEMANDA -->
+            <div class="bg-white rounded-[3rem] border border-slate-200 shadow-xl overflow-hidden group border-t-8 border-t-[#003366]">
+                <div class="grid md:grid-cols-2">
+                    <div class="bg-slate-50 p-8 flex items-center justify-center relative overflow-hidden">
+                        <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(#003366 1px, transparent 1px); background-size: 24px 24px;"></div>
+                        <div class="w-full h-96 bg-white rounded-[2rem] border border-slate-200 shadow-inner relative overflow-hidden flex items-center justify-center">
+                            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center">
+                                <i data-lucide="map" class="text-blue-900/20 mb-3" style="width: 64px; height: 64px;"></i>
+                                <div class="px-5 py-1.5 bg-[#003366] text-white rounded-full text-[9px] font-black uppercase tracking-widest text-center shadow-lg">Mapa de Planificación</div>
+                            </div>
                         </div>
-                        <div class="flex items-center gap-4">
-                            <div class="w-8 h-8 bg-slate-100 rounded-lg flex items-center justify-center text-igt-dark font-bold text-xs shadow-sm">02</div>
-                            <span class="text-sm font-semibold text-slate-700 uppercase tracking-wide">Inspección de la Denuncia</span>
+                    </div>
+                    <div class="p-12 flex flex-col justify-center bg-white">
+                        <div class="flex gap-3 items-center mb-6">
+                            <div class="w-10 h-10 rounded-xl bg-[#003366] text-white flex items-center justify-center font-black text-sm shadow-md">00</div>
+                            <h3 class="font-black text-slate-800 uppercase text-lg tracking-tighter">Análisis Geográfico de Demanda</h3>
                         </div>
-                        <div class="flex items-center gap-4">
-                            <div class="w-8 h-8 bg-slate-100 rounded-lg flex items-center justify-center text-igt-dark font-bold text-xs shadow-sm">03</div>
-                            <span class="text-sm font-semibold text-slate-700 uppercase tracking-wide">Verificación de la Denuncia</span>
-                        </div>
-                        <div class="flex items-center gap-4">
-                            <div class="w-8 h-8 bg-slate-100 rounded-lg flex items-center justify-center text-igt-dark font-bold text-xs shadow-sm">04</div>
-                            <span class="text-sm font-semibold text-slate-700 uppercase tracking-wide">Sanciones</span>
-                        </div>
-                        <div class="flex items-center gap-4">
-                            <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center text-igt-primary font-bold text-xs shadow-sm">05</div>
-                            <span class="text-sm font-bold text-igt-primary uppercase tracking-wide">Operativos</span>
+                        <div class="space-y-6">
+                            <p class="text-xs text-slate-600 leading-relaxed font-medium italic">
+                                "El sistema actúa como un filtro inteligente de derechos. Antes de iniciar la carnetización, se analiza el mapa estratégico para identificar los expedientes que ya superaron los hitos legales y presupuestarios."
+                            </p>
+                            <div class="p-6 bg-blue-50 border-l-4 border-l-[#003366] rounded-r-[1.5rem] shadow-sm">
+                                <h4 class="text-[11px] font-black text-[#003366] uppercase flex items-center gap-2 mb-2">
+                                    <i data-lucide="bar-chart-3" class="w-4 h-4"></i> Función Técnica del Mapa
+                                </h4>
+                                <p class="text-[11px] text-blue-900 leading-relaxed font-bold">
+                                    Funciona como una herramienta de cuantificación técnica de demanda. Permite al supervisor y notificador determinar el volumen exacto de carnets a imprimir por sector, optimizando el uso de insumos y planificando las rutas logísticas antes de procesar las bandejas.
+                                </p>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="p-4 bg-slate-50 border border-slate-100 rounded-2xl">
+                                    <p class="text-[10px] font-black text-[#003366] uppercase mb-1 flex items-center gap-1.5"><i data-lucide="shield-check" class="w-3.5 h-3.5"></i> Supervisor</p>
+                                    <p class="text-[9px] text-slate-500 leading-tight">Monitorea bandejas y utiliza el distribuidor automático para balanceo equitativo.</p>
+                                </div>
+                                <div class="p-4 bg-slate-50 border border-slate-100 rounded-2xl">
+                                    <p class="text-[10px] font-black text-[#003366] uppercase mb-1 flex items-center gap-1.5"><i data-lucide="user-check" class="w-3.5 h-3.5"></i> Notificador</p>
+                                    <p class="text-[9px] text-slate-500 leading-tight">Prepara e imprime basándose en la segmentación geográfica del mapa.</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="bg-white p-10 rounded-3xl shadow-lg border border-slate-100">
-                    <h4 class="font-bold mb-8 flex items-center gap-2 text-slate-700 uppercase tracking-wider text-sm">
-                        <svg class="w-5 h-5 text-blue-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
-                        ESTADO PRUEBAS DE CALIDAD QA
+            </div>
+
+            <!-- REQUISITOS DE GENERACIÓN -->
+            <div class="bg-slate-900 p-10 rounded-[3.5rem] text-white space-y-10 shadow-2xl relative overflow-hidden">
+                <div>
+                    <h4 class="text-base font-black text-blue-300 uppercase tracking-widest flex items-center gap-3 mb-6">
+                        <i data-lucide="file-check-2"></i> Generación de Notificación Positiva y Carnet
                     </h4>
-                    <div class="space-y-6">
-                        <div class="p-6 bg-blue-50 border border-blue-100 rounded-2xl flex flex-col items-center text-center">
-                            <div class="w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold mb-4 shadow-lg shadow-blue-200">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                            </div>
-                            <span class="text-lg font-bold text-blue-900 mb-1 italic tracking-tight">Proyecto 01: Gestión de la Denuncia</span>
-                            <span class="text-xs font-black text-blue-600 uppercase tracking-widest bg-blue-100 px-3 py-1 rounded-full">Sistematizado / Operativo</span>
+                    <p class="text-xs text-blue-100 mb-6 font-medium italic">Para habilitar estos documentos, el sistema exige el cumplimiento estricto de las siguientes reglas:</p>
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div class="bg-white/5 p-6 rounded-[1.5rem] border border-white/10">
+                            <p class="text-xs font-black text-emerald-400 uppercase mb-3 flex items-center gap-2">Resolución Autorizada</p>
+                            <p class="text-[11px] text-blue-100 leading-relaxed">Debe existir la resolución positiva (Resolución que declara beneficiario al adulto mayor) firmada electrónicamente (Firma electrónica avanzada) por la Directora General de Previsión Social.</p>
                         </div>
+                        <div class="bg-white/5 p-6 rounded-[1.5rem] border border-white/10">
+                            <p class="text-xs font-black text-emerald-400 uppercase mb-3 flex items-center gap-2">Seguridad de Pago</p>
+                            <p class="text-[11px] text-blue-100 leading-relaxed">El sistema verifica que el beneficiario tenga asignada la cuota presupuestaria para el inicio del aporte económico.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pt-10 border-t border-white/10">
+                    <h4 class="text-base font-black text-blue-300 uppercase tracking-widest flex items-center gap-3 mb-6">
+                        <i data-lucide="x-circle"></i> Generación de Notificación Negativa
+                    </h4>
+                    <p class="text-xs text-blue-100 mb-6 font-medium italic">En los casos donde el resultado del estudio socioeconómico no califica para el programa, el sistema habilita la descarga del documento bajo un criterio simplificado:</p>
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div class="bg-white/5 p-6 rounded-[1.5rem] border border-white/10">
+                            <p class="text-xs font-black text-blue-300 uppercase mb-3">Resolución Firmada</p>
+                            <p class="text-[11px] text-blue-100 leading-relaxed">Únicamente requiere la existencia de la resolución negativa (resolución que declara como no beneficiario al adulto mayor) firmada electrónicamente (Firma electrónica avanzada) por la Directora General de Previsión Social.</p>
+                        </div>
+                        <div class="bg-white/5 p-6 rounded-[1.5rem] border border-white/10">
+                            <p class="text-xs font-black text-blue-300 uppercase mb-3">Exención de Seguridad de Pago</p>
+                            <p class="text-[11px] text-blue-100 leading-relaxed">Al no generar un compromiso financiero para el Ministerio, el sistema no evalúa la seguridad de pago, permitiendo al notificador descargar el documento para proceder con la notificación legal al ciudadano.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MATRIZ DE ESTADOS -->
+            <div class="bg-white p-12 rounded-[3.5rem] border border-slate-200 shadow-sm">
+                <h3 class="text-xs font-black text-slate-400 uppercase tracking-[0.4em] mb-12 text-center text-[#003366] underline underline-offset-[12px] decoration-blue-100">MATRIZ DE ESTADOS</h3>
+                <div class="grid md:grid-cols-5 gap-8">
+                    <!-- Estado Azul -->
+                    <div class="flex flex-col items-center text-center group">
+                        <div class="w-16 h-16 rounded-[1.5rem] bg-blue-600 flex items-center justify-center text-white shadow-xl mb-5 transition-transform group-hover:-translate-y-2 font-black text-2xl">1</div>
+                        <h4 class="font-black text-[11px] text-slate-800 mb-3 uppercase leading-tight min-h-[22px]">NUEVO (AZUL)</h4>
+                        <p class="text-[10px] text-slate-500 leading-relaxed font-medium">Esta es la bandeja de entrada principal. Solo muestra los expedientes que tienen Firma de la Directora General de Previsión Social y Seguridad de Pago, pero que nunca han sido descargados.</p>
+                    </div>
+                    <!-- Estado Naranja -->
+                    <div class="flex flex-col items-center text-center group">
+                        <div class="w-16 h-16 rounded-[1.5rem] bg-orange-500 flex items-center justify-center text-white shadow-xl mb-5 transition-transform group-hover:-translate-y-2 font-black text-2xl">2</div>
+                        <h4 class="font-black text-[11px] text-slate-800 mb-3 uppercase leading-tight min-h-[22px]">EN PROCESO (NARANJA)</h4>
+                        <p class="text-[10px] text-slate-500 leading-relaxed font-medium">El PDF ya se descargó pero aún no se ha confirmado la impresión física. El sistema permite descargar el PDF individualmente o por lotes.</p>
+                    </div>
+                    <!-- Estado Celeste -->
+                    <div class="flex flex-col items-center text-center group">
+                        <div class="w-16 h-16 rounded-[1.5rem] bg-sky-400 flex items-center justify-center text-white shadow-xl mb-5 transition-transform group-hover:-translate-y-2 font-black text-2xl">3</div>
+                        <h4 class="font-black text-[11px] text-slate-800 mb-3 uppercase leading-tight min-h-[22px]">IMPRESO (CELESTE)</h4>
+                        <p class="text-[10px] text-slate-500 leading-relaxed font-medium">El Notificador ya confirmó manualmente que el carnet físico está en su poder y listo para entrega.</p>
+                    </div>
+                    <!-- Estado Verde -->
+                    <div class="flex flex-col items-center text-center group">
+                        <div class="w-16 h-16 rounded-[1.5rem] bg-green-600 flex items-center justify-center text-white shadow-xl mb-5 transition-transform group-hover:-translate-y-2 font-black text-2xl">4</div>
+                        <h4 class="font-black text-[11px] text-slate-800 mb-3 uppercase leading-tight min-h-[22px]">ENTREGADOS (VERDE)</h4>
+                        <p class="text-[10px] text-slate-500 leading-relaxed font-medium">El proceso terminó con éxito. El PAM ya entrego el carnet al nuevo beneficiario.</p>
+                    </div>
+                    <!-- Estado Gris -->
+                    <div class="flex flex-col items-center text-center group">
+                        <div class="w-16 h-16 rounded-[1.5rem] bg-gray-400 flex items-center justify-center text-white shadow-xl mb-5 transition-transform group-hover:-translate-y-2 font-black text-2xl">5</div>
+                        <h4 class="font-black text-[11px] text-slate-800 mb-3 uppercase leading-tight min-h-[22px]">REIMPRESIÓN (GRIS)</h4>
+                        <p class="text-[10px] text-slate-500 leading-relaxed font-medium">Indica que el carnet original se dañó/perdió y se está emitiendo un duplicado.</p>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
 
-    <!-- Módulos del Proyecto 02 -->
-    <section id="modulos" class="py-24 bg-slate-100 px-6 text-center">
-        <div class="max-w-7xl mx-auto">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl font-extrabold text-igt-dark mb-4 uppercase tracking-tighter text-center">Módulos del Proyecto 02</h2>
-                <p class="text-slate-500 font-medium italic">Propósito técnico según formatos institucionales vigentes (F-DISI-001).</p>
+        <!-- ESCENARIO 02: ENTREGA DE NOTIFICACIONES Y CARNETS -->
+        <div id="view-field" class="space-y-12 animate-in fade-in slide-in-from-right duration-700 hidden">
+            <div class="text-center max-w-2xl mx-auto mb-16">
+                <h2 class="text-4xl font-black text-slate-800 uppercase tracking-tight leading-none text-emerald-900">ENTREGA DE NOTIFICACIONES Y CARNETS</h2>
+                <div class="h-1.5 w-24 bg-emerald-600 mx-auto mt-4 rounded-full"></div>
+                <p class="text-slate-500 mt-6 leading-relaxed font-medium uppercase text-xs tracking-widest text-emerald-800">
+                    Operatividad en territorio para validación y cierre de entrega.
+                </p>
             </div>
 
-            <div class="grid md:grid-cols-3 gap-8 mb-12 text-left">
-                <!-- Juicio Ejecutivo -->
-                <div class="card-hover bg-white p-10 rounded-2xl border-t-4 border-igt-primary transition-all duration-300">
-                    <div class="bg-blue-50 w-16 h-16 rounded-2xl flex items-center justify-center mb-8">
-                        <svg class="w-8 h-8 text-igt-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
-                    </div>
-                    <h3 class="text-xl font-bold mb-4 text-igt-dark uppercase leading-tight">Juicio Ejecutivo</h3>
-                    <p class="text-slate-600 text-sm leading-relaxed mb-6 italic">
-                        "Promover la acción ejecutiva para obtener el cobro de la multa impuesta y exigir el cumplimiento de la resolución administrativa firme."
-                    </p>
-                    <span class="text-[10px] font-bold text-slate-400 tracking-widest uppercase">Referencia: P-IGT-019</span>
-                </div>
-
-                <!-- Recurso Administrativo de Revocatoria -->
-                <div class="card-hover bg-white p-10 rounded-2xl border-t-4 border-igt-primary transition-all duration-300">
-                    <div class="bg-blue-50 w-16 h-16 rounded-2xl flex items-center justify-center mb-8">
-                        <svg class="w-8 h-8 text-igt-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
-                    </div>
-                    <h3 class="text-xl font-bold mb-4 text-igt-dark uppercase leading-tight">Recurso Administrativo de Revocatoria</h3>
-                    <p class="text-slate-600 text-sm leading-relaxed mb-6 italic">
-                        "Recibir, registrar, incorporar y elevar el recurso administrativo de revocatoria interpuesto contra una resolución emitida por la IGT, a efecto de que la autoridad competente lo conozca y resuelva."
-                    </p>
-                    <span class="text-[10px] font-bold text-slate-400 tracking-widest uppercase">Referencia: P-IGT-020</span>
-                </div>
-
-                <!-- Juicio Contencioso Administrativo Laboral -->
-                <div class="card-hover bg-white p-10 rounded-2xl border-t-4 border-igt-primary transition-all duration-300">
-                    <div class="bg-blue-50 w-16 h-16 rounded-2xl flex items-center justify-center mb-8">
-                        <svg class="w-8 h-8 text-igt-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"></path></svg>
-                    </div>
-                    <h3 class="text-xl font-bold mb-4 text-igt-dark uppercase leading-tight">Juicio Contencioso Administrativo Laboral</h3>
-                    <p class="text-slate-600 text-sm leading-relaxed mb-6 italic">
-                        "Atender la demanda contencioso-administrativa laboral promovida por el sancionado, incluyendo la certificación del expediente, la comparecencia judicial y la aplicación del fallo emitido por el órgano jurisdiccional."
-                    </p>
-                    <span class="text-[10px] font-bold text-slate-400 tracking-widest uppercase">Referencia: P-IGT-021</span>
-                </div>
-            </div>
-
-            <!-- Módulo de Reportería -->
-            <div class="max-w-4xl mx-auto">
-                <div class="card-hover bg-igt-dark p-8 rounded-3xl border-l-8 border-igt-primary text-left">
-                    <div class="flex flex-col md:flex-row items-center gap-8">
-                        <div class="bg-igt-primary/20 w-20 h-20 rounded-2xl flex items-center justify-center shrink-0">
-                            <svg class="w-10 h-10 text-igt-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+            <div class="grid lg:grid-cols-3 gap-8">
+                
+                <!-- PASO A PASO DEL FLUJO OPERATIVO -->
+                <div class="lg:col-span-2 bg-white rounded-[3.5rem] border border-slate-200 shadow-xl p-12 relative">
+                    <div class="flex items-center gap-5 mb-14">
+                        <div class="w-14 h-14 bg-emerald-100 text-emerald-700 rounded-[1.5rem] flex items-center justify-center shadow-inner">
+                            <i data-lucide="fingerprint" style="width:32px; height:32px;"></i>
                         </div>
                         <div>
-                            <h3 class="text-2xl font-bold text-white uppercase">Reportería y Control Gerencial</h3>
+                            <h3 class="font-black text-slate-800 uppercase text-xl leading-none tracking-tight">FLUJO OPERATIVO DE CAMPO</h3>
+                            <p class="text-[11px] font-bold text-slate-400 mt-2 uppercase tracking-widest">Protocolo de Notificación y Carnet</p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-10 relative">
+                        <div class="absolute left-5 top-5 bottom-5 w-1 bg-slate-100 rounded-full"></div>
+                        
+                        <div class="flex gap-10 items-start relative">
+                            <div class="w-10 h-10 rounded-full bg-[#003366] text-white flex items-center justify-center shrink-0 font-black text-sm z-10 shadow-lg">1</div>
+                            <div class="pt-1">
+                                <p class="font-black text-base uppercase text-slate-800 leading-none">Búsqueda y Despliegue</p>
+                                <p class="text-xs text-slate-500 mt-3 leading-relaxed">El Notificador busca por CUI. El sistema muestra lo que se describe en: INTERFAZ DE VALIDACIÓN INTEGRAL.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-10 items-start relative">
+                            <div class="w-10 h-10 rounded-full bg-[#003366] text-white flex items-center justify-center shrink-0 font-black text-sm z-10 shadow-lg">2</div>
+                            <div class="pt-1">
+                                <p class="font-black text-base uppercase text-slate-800 leading-none">Validación de Resolución</p>
+                                <div class="mt-3 p-4 bg-slate-50 rounded-2xl border border-slate-100 space-y-2">
+                                    <p class="text-xs text-slate-600 leading-relaxed">El sistema identifica si la resolución es Positiva (Aprobada) o Negativa (Denegada).</p>
+                                    <div class="grid grid-cols-2 gap-4 mt-2">
+                                        <div class="p-2 border-l-2 border-red-400 bg-red-50">
+                                            <p class="text-[10px] font-black text-red-800 uppercase">Si es Negativa:</p>
+                                            <p class="text-[9px] text-red-700">Se procede directamente a la captura de firma/huella para notificar el rechazo.</p>
+                                        </div>
+                                        <div class="p-2 border-l-2 border-emerald-400 bg-emerald-50">
+                                            <p class="text-[10px] font-black text-emerald-800 uppercase">Si es Positiva:</p>
+                                            <p class="text-[9px] text-emerald-700">El sistema activa el Control de Carnet.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-10 items-start relative">
+                            <div class="w-10 h-10 rounded-full bg-[#003366] text-white flex items-center justify-center shrink-0 font-black text-sm z-10 shadow-lg">3</div>
+                            <div class="pt-1">
+                                <p class="font-black text-base uppercase text-slate-800 leading-none">Control de Carnet</p>
+                                <p class="text-xs text-slate-500 mt-3">El sistema verifica si el carnet está en estado Celeste (IMPRESO).</p>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-10 items-start relative">
+                            <div class="w-10 h-10 rounded-full bg-orange-500 text-white flex items-center justify-center shrink-0 font-black text-sm z-10 shadow-xl">4</div>
+                            <div class="bg-orange-50 p-6 rounded-[2rem] border border-orange-100 w-full shadow-sm relative">
+                                <div class="absolute top-0 right-0 p-4 opacity-10"><i data-lucide="alert-triangle" style="width:48px; height:48px;"></i></div>
+                                <p class="font-black text-xs uppercase text-orange-800 mb-3 flex items-center gap-2 italic">Alerta de Emergencia</p>
+                                <p class="text-[11px] text-orange-700 leading-relaxed font-semibold">
+                                    Si el carnet NO ha sido validado de impreso en oficina, el sistema lanza una alerta naranja: <strong>"Carnet no impreso"</strong>. Se habilita el botón de Impresión en Sitio para que el Notificador lo genere en ese momento.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-10 items-start relative">
+                            <div class="w-10 h-10 rounded-full bg-[#003366] text-white flex items-center justify-center shrink-0 font-black text-sm z-10 shadow-lg">5</div>
+                            <div class="pt-1">
+                                <p class="font-black text-base uppercase text-slate-800 leading-none">Vista Previa y Captura Biométrica</p>
+                                <p class="text-xs text-slate-500 mt-3">El sistema genera una vista previa de la Notificación con los datos del adulto mayor. Se solicita que el beneficiario coloque su Firma o Huella Digital.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-10 items-start relative">
+                            <div class="w-10 h-10 rounded-full bg-[#003366] text-white flex items-center justify-center shrink-0 font-black text-sm z-10 shadow-lg">6</div>
+                            <div class="pt-1">
+                                <p class="font-black text-base uppercase text-slate-800 leading-none">Estampado Digital</p>
+                                <p class="text-xs text-slate-500 mt-3 font-medium">El sistema fusiona en el documento PDF: los datos del beneficiario + la firma o huella capturada + el sello digital del Notificador responsable.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-10 items-start relative">
+                            <div class="w-10 h-10 rounded-full bg-green-600 text-white flex items-center justify-center shrink-0 font-black text-sm z-10 shadow-lg">7</div>
+                            <div class="pt-1">
+                                <p class="font-black text-base uppercase text-green-700 leading-none">Cierre y Registro</p>
+                                <p class="text-xs text-slate-500 mt-4 leading-relaxed font-bold text-emerald-800 italic">
+                                    "El Notificador confirma la entrega física del carnet y la notificación. El sistema captura automáticamente el Usuario, Fecha y Hora exacta (Log), cambiando el estado a “ENTREGADO”."
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </section>
 
-    <!-- Análisis de Requerimientos -->
-    <section id="analisis" class="py-24 px-6 bg-igt-dark text-white">
-        <div class="max-w-6xl mx-auto">
-            <div class="flex flex-col lg:flex-row gap-16 items-center">
-                <div class="lg:w-1/2">
-                    <h2 class="text-4xl font-extrabold mb-8 uppercase tracking-tighter">Análisis de<br><span class="text-blue-400">Requerimientos</span></h2>
-                    <p class="text-slate-300 mb-10 leading-relaxed text-lg">
-                        Se realizará un análisis exhaustivo del sistema y de los procesos remitidos por IGT para la elaboración del documento **DISI-FO-003-ANÁLISIS DE PROCESOS PARA GENERACIÓN DE REQUERIMIENTOS**, paso indispensable **para generar un cronograma de desarrollo** preciso.
-                    </p>
-                    <ul class="space-y-6 text-sm">
-                        <li class="flex gap-4 items-start">
-                            <div class="shrink-0 w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center font-bold">1</div>
-                            <p>Análisis técnico del sistema actual y de los procesos enviados por IGT para asegurar la validez documental y técnica de los requerimientos.</p>
-                        </li>
-                        <li class="flex gap-4 items-start">
-                            <div class="shrink-0 w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center font-bold">2</div>
-                            <p>Formalización mediante el documento DISI-FO-003, garantizando que cada etapa del flujo judicial mantenga su sustento legal.</p>
-                        </li>
-                    </ul>
-                </div>
-                <div class="lg:w-1/2">
-                    <div class="bg-slate-800 p-8 rounded-3xl border border-slate-700">
-                        <h4 class="text-xl font-bold mb-6 text-blue-400 uppercase tracking-widest text-sm text-center">Formalización Técnica</h4>
-                        <div class="space-y-4">
-                            <div class="bg-slate-900/50 p-5 rounded-xl border-l-4 border-blue-500 text-sm">
-                                <p class="text-blue-200 text-xs font-bold uppercase mb-1">Entregable Principal</p>
-                                <p class="font-bold text-white">Cronograma de Desarrollo Basado en Análisis</p>
-                            </div>
-                            <div class="bg-slate-900/50 p-5 rounded-xl border-l-4 border-blue-500 text-sm">
-                                <p class="text-blue-200 text-xs font-bold uppercase mb-1">Estatus Normativo</p>
-                                <p class="font-bold text-white">DISI-FO-003: Validez Documental del Proceso</p>
-                            </div>
-                            <div class="bg-slate-900/50 p-5 rounded-xl border-l-4 border-blue-500 text-sm">
-                                <p class="text-blue-200 text-xs font-bold uppercase mb-1">Metodología</p>
-                                <p class="font-bold text-white">Análisis de Procesos Enviados por IGT</p>
-                            </div>
-                        </div>
+                <!-- INTERFAZ DE VALIDACIÓN INTEGRAL (COLOCADA A LA DERECHA) -->
+                <div class="space-y-6">
+                    <h3 class="text-[11px] font-black text-slate-400 uppercase tracking-widest px-2 italic">INTERFAZ DE VALIDACIÓN INTEGRAL</h3>
+                    <div class="p-6 bg-white border border-slate-200 rounded-[2rem] shadow-sm border-l-8 border-l-blue-900 hover:bg-blue-50 transition-colors">
+                        <h4 class="text-xs font-black text-blue-900 mb-3 uppercase tracking-tight">Datos de Inscripción</h4>
+                        <p class="text-[10px] text-slate-500 leading-relaxed font-medium">Visualización de CUI, Nombre Completo, Edad, Dirección de Residencia y Teléfonos. Permite al Notificador confirmar que la persona física frente a él coincide con el registro oficial.</p>
+                    </div>
+                    <div class="p-6 bg-white border border-slate-200 rounded-[2rem] shadow-sm border-l-8 border-l-blue-900 hover:bg-blue-50 transition-colors">
+                        <h4 class="text-xs font-black text-blue-900 mb-3 uppercase tracking-tight">Datos de estudio socioeconómico</h4>
+                        <p class="text-[10px] text-slate-500 leading-relaxed font-medium">Muestra los datos generales del estudio socioeconómico como la evaluación, fotografías y documentos cargados durante el estudio. Proporciona al Notificador los argumentos técnicos para explicar el fundamento de la resolución (Positiva o Negativa).</p>
+                    </div>
+                    <div class="p-6 bg-white border border-slate-200 rounded-[2rem] shadow-sm border-l-8 border-l-blue-900 hover:bg-blue-50 transition-colors">
+                        <h4 class="text-xs font-black text-blue-900 mb-3 uppercase tracking-tight">Galería de Documentos</h4>
+                        <p class="text-[10px] text-slate-500 leading-relaxed font-medium">Acceso inmediato a archivos digitalizados recopilados durante el proceso de inscripción o estudio socioeconómico como DPI escaneado, constancia de inscripción, certificado de nacimiento.</p>
+                    </div>
+                    <div class="p-6 bg-white border border-slate-200 rounded-[2rem] shadow-sm border-l-8 border-l-emerald-600 hover:bg-emerald-50 transition-colors">
+                        <h4 class="text-xs font-black text-emerald-700 mb-3 uppercase tracking-tight">Monitor de Trazabilidad</h4>
+                        <p class="text-[10px] text-slate-500 leading-relaxed font-medium">Línea de tiempo que confirma si el expediente ya cuenta con estudio y resolución firmada. Si el estudio no existe, el sistema bloquea automáticamente las acciones de notificación.</p>
                     </div>
                 </div>
+
             </div>
         </div>
-    </section>
+    </main>
 
-    <!-- Footer -->
-    <footer class="bg-white py-12 px-6 border-t border-slate-200 text-center">
-        <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Dirección de Sistemas de Información</p>
-        <p class="text-sm text-slate-600 mb-8 font-medium italic">"PROYECTO 02 - Ministerio de Trabajo y Previsión Social"</p>
+    <footer class="max-w-6xl mx-auto mt-20 px-6 pt-12 border-t flex flex-col md:flex-row justify-between items-center gap-8 text-center md:text-left">
+        <div class="flex items-center gap-5">
+            <i data-lucide="info" class="text-slate-300" style="width:40px; height:40px;"></i>
+            <div>
+                <h5 class="font-black text-[#003366] uppercase text-sm tracking-tight leading-none">Guía Conceptual de Procesos - Programa PAM</h5>
+                <p class="text-[11px] text-slate-400 mt-2 uppercase font-bold tracking-widest leading-none">Ministerio de Trabajo y Previsión Social</p>
+            </div>
+        </div>
+        <div class="px-6 py-3 bg-[#003366] rounded-2xl shadow-lg text-white">
+            <span class="text-[10px] font-black uppercase tracking-[0.2em]">MINTRAB 2024</span>
+        </div>
     </footer>
 
+    <script>
+        // Inicializar iconos
+        lucide.createIcons();
+
+        // Función para cambiar de vista
+        function switchView(view) {
+            const officeView = document.getElementById('view-office');
+            const fieldView = document.getElementById('view-field');
+            const btnOffice = document.getElementById('btn-office');
+            const btnField = document.getElementById('btn-field');
+
+            if (view === 'office') {
+                officeView.classList.remove('hidden');
+                fieldView.classList.add('hidden');
+                btnOffice.classList.add('tab-active');
+                btnOffice.classList.remove('text-slate-500');
+                btnField.classList.remove('tab-active');
+                btnField.classList.add('text-slate-500');
+            } else {
+                officeView.classList.add('hidden');
+                fieldView.classList.remove('hidden');
+                btnField.classList.add('tab-active');
+                btnField.classList.remove('text-slate-500');
+                btnOffice.classList.remove('tab-active');
+                btnOffice.classList.add('text-slate-500');
+            }
+            // Repintar iconos de Lucide por si aparecen nuevos elementos
+            lucide.createIcons();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
 </body>
 </html>
